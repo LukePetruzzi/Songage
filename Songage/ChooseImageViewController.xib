@@ -8,6 +8,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChooseImageViewController" customModule="Songage" customModuleProvider="target">
             <connections>
+                <outlet property="createSongageButton" destination="wSI-Ra-Ppo" id="lyH-IN-uaE"/>
                 <outlet property="imageView" destination="KLX-ok-ar5" id="DZn-2d-ikA"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>

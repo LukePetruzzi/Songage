@@ -14,6 +14,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
 
     // create all outlets
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var createSongageButton: UIButton!
     
     // create an image picker to use when add photo button is tapped
     let imagePicker = UIImagePickerController()
@@ -25,7 +26,6 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         // set the delegate of the imagePicker
         imagePicker.delegate = self
         
-        ClarifaiAPIManager.sharedInstance.getOAuthToken()
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,10 +59,12 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             self.imagePicker.sourceType = .SavedPhotosAlbum
             self.presentViewController(self.imagePicker, animated: true, completion: nil)
         })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Destructive, handler: nil)
         
         alert.addAction(cameraAction)
         alert.addAction(libraryAction)
         alert.addAction(albumAction)
+        alert.addAction(cancelAction)
         
         // present the controller
         self.presentViewController(alert, animated: true, completion: nil)
@@ -94,7 +96,43 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     // begin Songage creation. Send imageData to Clarifai
     @IBAction func createSongageTapped(sender: UIButton)
     {
+        // dont make the request unless an image is picked
+        if imageView.image! != UIImage(named: "defaultImage")
+        {
+            // disable button until completion function is finished
+            createSongageButton.enabled = false
+            
+            // format the image to jpeg
+            let jpeg = UIImageJPEGRepresentation(self.imageView.image!, 0.9)!
+            
+            // get the tags for the image
+            ClarifaiAPIManager.sharedInstance.getTagsForImage(jpeg, completion: getTagsComplete)
+        }
+        else
+        {
+            // create and show an alert that the user has no image selected
+            let alert = UIAlertController(title: "No Image", message: "To create a Songage, supply an image!", preferredStyle: .ActionSheet)
+            let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+            alert.addAction(okAction)
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
         
+    }
+    
+    // after the button has been tapped
+    func getTagsComplete(tags: [String]?, error: NSError?)
+    {
+        if tags != nil
+        {
+            print("Returned tags: \(tags!)")
+        }
+        else{
+            print("ERROR IN TAGS COMPLETE: \(error!.localizedDescription)")
+        }
+        
+        
+        // reenable the button to create a songage
+        createSongageButton.enabled = true
     }
     
 }
