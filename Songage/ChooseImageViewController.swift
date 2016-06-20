@@ -24,6 +24,8 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         
         // set the delegate of the imagePicker
         imagePicker.delegate = self
+        
+        ClarifaiAPIManager.sharedInstance.getOAuthToken()
     }
 
     override func didReceiveMemoryWarning() {
