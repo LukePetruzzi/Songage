@@ -8,20 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		4071B9841D17E974009B4151 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4071B9831D17E974009B4151 /* AppDelegate.swift */; };
-		4071B9861D17E974009B4151 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4071B9851D17E974009B4151 /* ViewController.swift */; };
-		4071B9891D17E974009B4151 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4071B9871D17E974009B4151 /* Main.storyboard */; };
 		4071B98B1D17E974009B4151 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4071B98A1D17E974009B4151 /* Assets.xcassets */; };
 		4071B98E1D17E974009B4151 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4071B98C1D17E974009B4151 /* LaunchScreen.storyboard */; };
+		4071B9971D17EA78009B4151 /* ChooseImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4071B9951D17EA78009B4151 /* ChooseImageViewController.swift */; };
+		4071B9981D17EA78009B4151 /* ChooseImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4071B9961D17EA78009B4151 /* ChooseImageViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4071B9801D17E974009B4151 /* Songage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Songage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4071B9831D17E974009B4151 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4071B9851D17E974009B4151 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		4071B9881D17E974009B4151 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4071B98A1D17E974009B4151 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4071B98D1D17E974009B4151 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4071B98F1D17E974009B4151 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4071B9951D17EA78009B4151 /* ChooseImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseImageViewController.swift; sourceTree = "<group>"; };
+		4071B9961D17EA78009B4151 /* ChooseImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChooseImageViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,11 +55,11 @@
 			isa = PBXGroup;
 			children = (
 				4071B9831D17E974009B4151 /* AppDelegate.swift */,
-				4071B9851D17E974009B4151 /* ViewController.swift */,
-				4071B9871D17E974009B4151 /* Main.storyboard */,
 				4071B98A1D17E974009B4151 /* Assets.xcassets */,
 				4071B98C1D17E974009B4151 /* LaunchScreen.storyboard */,
 				4071B98F1D17E974009B4151 /* Info.plist */,
+				4071B9951D17EA78009B4151 /* ChooseImageViewController.swift */,
+				4071B9961D17EA78009B4151 /* ChooseImageViewController.xib */,
 			);
 			path = Songage;
 			sourceTree = "<group>";
@@ -96,6 +96,7 @@
 				TargetAttributes = {
 					4071B97F1D17E974009B4151 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = JXML5VQZ23;
 					};
 				};
 			};
@@ -124,7 +125,7 @@
 			files = (
 				4071B98E1D17E974009B4151 /* LaunchScreen.storyboard in Resources */,
 				4071B98B1D17E974009B4151 /* Assets.xcassets in Resources */,
-				4071B9891D17E974009B4151 /* Main.storyboard in Resources */,
+				4071B9981D17EA78009B4151 /* ChooseImageViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,22 +136,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4071B9861D17E974009B4151 /* ViewController.swift in Sources */,
 				4071B9841D17E974009B4151 /* AppDelegate.swift in Sources */,
+				4071B9971D17EA78009B4151 /* ChooseImageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		4071B9871D17E974009B4151 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4071B9881D17E974009B4151 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		4071B98C1D17E974009B4151 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -249,10 +242,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Songage/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lukepetruzzi.Songage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -260,10 +256,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Songage/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lukepetruzzi.Songage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

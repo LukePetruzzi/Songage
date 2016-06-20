@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChooseImageViewController" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChooseImageViewController" customModule="Songage" customModuleProvider="target">
             <connections>
+                <outlet property="imageView" destination="KLX-ok-ar5" id="DZn-2d-ikA"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -13,7 +16,126 @@
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Give us an Image" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uon-3o-dGB">
+                    <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultImage" translatesAutoresizingMaskIntoConstraints="NO" id="KLX-ok-ar5">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="KLX-ok-ar5" secondAttribute="height" multiplier="1:1" id="6M1-B2-gXb"/>
+                        <constraint firstAttribute="height" constant="275" id="yh6-We-wv9"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="6M1-B2-gXb"/>
+                            <exclude reference="yh6-We-wv9"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="6M1-B2-gXb"/>
+                            <include reference="yh6-We-wv9"/>
+                        </mask>
+                    </variation>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LHf-LL-1kG">
+                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="140" id="ufP-9a-n2k"/>
+                    </constraints>
+                    <state key="normal" title="Add New Image"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="ufP-9a-n2k"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="ufP-9a-n2k"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="addImageButtonTapped:" destination="-1" eventType="touchUpInside" id="dAD-dL-GzN"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wSI-Ra-Ppo">
+                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="125" id="AND-me-fbo"/>
+                    </constraints>
+                    <state key="normal" title="Create Songage"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="AND-me-fbo"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="AND-me-fbo"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="createSongageTapped:" destination="-1" eventType="touchUpInside" id="OCj-TT-DiV"/>
+                    </connections>
+                </button>
+            </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="wSI-Ra-Ppo" firstAttribute="top" secondItem="LHf-LL-1kG" secondAttribute="bottom" constant="45" id="HtH-uh-paR"/>
+                <constraint firstItem="LHf-LL-1kG" firstAttribute="top" secondItem="KLX-ok-ar5" secondAttribute="bottom" constant="49" id="JKH-dB-tdP"/>
+                <constraint firstItem="uon-3o-dGB" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="31" id="UQ9-9m-qtG"/>
+                <constraint firstItem="KLX-ok-ar5" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="63" id="Vbx-aL-A3y"/>
+                <constraint firstItem="wSI-Ra-Ppo" firstAttribute="centerX" secondItem="LHf-LL-1kG" secondAttribute="centerX" id="khz-UP-c33"/>
+                <constraint firstItem="uon-3o-dGB" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="lfJ-2v-xsS"/>
+                <constraint firstItem="KLX-ok-ar5" firstAttribute="top" secondItem="uon-3o-dGB" secondAttribute="bottom" constant="55" id="qrR-7q-CgJ"/>
+                <constraint firstItem="KLX-ok-ar5" firstAttribute="centerX" secondItem="LHf-LL-1kG" secondAttribute="centerX" id="t0R-KW-CjD"/>
+                <constraint firstItem="uon-3o-dGB" firstAttribute="centerX" secondItem="KLX-ok-ar5" secondAttribute="centerX" id="yL4-1t-THT"/>
+            </constraints>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="uon-3o-dGB"/>
+                    <exclude reference="KLX-ok-ar5"/>
+                    <exclude reference="LHf-LL-1kG"/>
+                    <exclude reference="wSI-Ra-Ppo"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="Vbx-aL-A3y"/>
+                    <exclude reference="qrR-7q-CgJ"/>
+                    <exclude reference="t0R-KW-CjD"/>
+                    <exclude reference="UQ9-9m-qtG"/>
+                    <exclude reference="lfJ-2v-xsS"/>
+                    <exclude reference="yL4-1t-THT"/>
+                    <exclude reference="JKH-dB-tdP"/>
+                    <exclude reference="HtH-uh-paR"/>
+                    <exclude reference="khz-UP-c33"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="subviews">
+                    <include reference="uon-3o-dGB"/>
+                    <include reference="KLX-ok-ar5"/>
+                    <include reference="LHf-LL-1kG"/>
+                    <include reference="wSI-Ra-Ppo"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="Vbx-aL-A3y"/>
+                    <include reference="qrR-7q-CgJ"/>
+                    <include reference="t0R-KW-CjD"/>
+                    <include reference="UQ9-9m-qtG"/>
+                    <include reference="lfJ-2v-xsS"/>
+                    <include reference="yL4-1t-THT"/>
+                    <include reference="JKH-dB-tdP"/>
+                    <include reference="HtH-uh-paR"/>
+                    <include reference="khz-UP-c33"/>
+                </mask>
+            </variation>
         </view>
     </objects>
+    <resources>
+        <image name="defaultImage" width="500" height="500"/>
+    </resources>
 </document>
