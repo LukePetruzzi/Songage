@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class ChooseImageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -63,17 +65,6 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         // present the controller
         self.presentViewController(alert, animated: true, completion: nil)
     }
-    
-//    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?)
-//    {
-//        if let pickedImage = editingInfo![UIImagePickerControllerOriginalImage] as? UIImage
-//        {
-//            // fit the image to the view and add it
-//            imageView.image = pickedImage
-//        }
-//        
-//        dismissViewControllerAnimated(true, completion: nil)
-//    }
     
     // finished picking the image from the controller
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject])

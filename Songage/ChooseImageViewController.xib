@@ -103,15 +103,15 @@
                     <exclude reference="wSI-Ra-Ppo"/>
                 </mask>
                 <mask key="constraints">
-                    <exclude reference="Vbx-aL-A3y"/>
-                    <exclude reference="qrR-7q-CgJ"/>
-                    <exclude reference="t0R-KW-CjD"/>
-                    <exclude reference="UQ9-9m-qtG"/>
-                    <exclude reference="lfJ-2v-xsS"/>
-                    <exclude reference="yL4-1t-THT"/>
                     <exclude reference="JKH-dB-tdP"/>
                     <exclude reference="HtH-uh-paR"/>
                     <exclude reference="khz-UP-c33"/>
+                    <exclude reference="UQ9-9m-qtG"/>
+                    <exclude reference="lfJ-2v-xsS"/>
+                    <exclude reference="yL4-1t-THT"/>
+                    <exclude reference="Vbx-aL-A3y"/>
+                    <exclude reference="qrR-7q-CgJ"/>
+                    <exclude reference="t0R-KW-CjD"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
@@ -122,15 +122,15 @@
                     <include reference="wSI-Ra-Ppo"/>
                 </mask>
                 <mask key="constraints">
-                    <include reference="Vbx-aL-A3y"/>
-                    <include reference="qrR-7q-CgJ"/>
-                    <include reference="t0R-KW-CjD"/>
-                    <include reference="UQ9-9m-qtG"/>
-                    <include reference="lfJ-2v-xsS"/>
-                    <include reference="yL4-1t-THT"/>
                     <include reference="JKH-dB-tdP"/>
                     <include reference="HtH-uh-paR"/>
                     <include reference="khz-UP-c33"/>
+                    <include reference="UQ9-9m-qtG"/>
+                    <include reference="lfJ-2v-xsS"/>
+                    <include reference="yL4-1t-THT"/>
+                    <include reference="Vbx-aL-A3y"/>
+                    <include reference="qrR-7q-CgJ"/>
+                    <include reference="t0R-KW-CjD"/>
                 </mask>
             </variation>
         </view>

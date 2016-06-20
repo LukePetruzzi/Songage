@@ -12,6 +12,8 @@
 		4071B98E1D17E974009B4151 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4071B98C1D17E974009B4151 /* LaunchScreen.storyboard */; };
 		4071B9971D17EA78009B4151 /* ChooseImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4071B9951D17EA78009B4151 /* ChooseImageViewController.swift */; };
 		4071B9981D17EA78009B4151 /* ChooseImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4071B9961D17EA78009B4151 /* ChooseImageViewController.xib */; };
+		4071B99A1D1802DA009B4151 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 4071B9991D1802DA009B4151 /* Podfile */; };
+		A9D1EC0CFD323264774DB1A9 /* Pods_Songage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB0D8EE0DE37682DFC5499D3 /* Pods_Songage.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,10 @@
 		4071B98F1D17E974009B4151 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4071B9951D17EA78009B4151 /* ChooseImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseImageViewController.swift; sourceTree = "<group>"; };
 		4071B9961D17EA78009B4151 /* ChooseImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChooseImageViewController.xib; sourceTree = "<group>"; };
+		4071B9991D1802DA009B4151 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		5F847531C3F00A7FE6932174 /* Pods-Songage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Songage.release.xcconfig"; path = "Pods/Target Support Files/Pods-Songage/Pods-Songage.release.xcconfig"; sourceTree = "<group>"; };
+		76AFCCD961B91C06DE8A91A7 /* Pods-Songage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Songage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Songage/Pods-Songage.debug.xcconfig"; sourceTree = "<group>"; };
+		FB0D8EE0DE37682DFC5499D3 /* Pods_Songage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Songage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9D1EC0CFD323264774DB1A9 /* Pods_Songage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +47,8 @@
 			children = (
 				4071B9821D17E974009B4151 /* Songage */,
 				4071B9811D17E974009B4151 /* Products */,
+				F7B1C03A7376ECEFEC02264D /* Pods */,
+				937C474254FE5C142F992D34 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -55,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				4071B9831D17E974009B4151 /* AppDelegate.swift */,
+				4071B9991D1802DA009B4151 /* Podfile */,
 				4071B98A1D17E974009B4151 /* Assets.xcassets */,
 				4071B98C1D17E974009B4151 /* LaunchScreen.storyboard */,
 				4071B98F1D17E974009B4151 /* Info.plist */,
@@ -64,6 +74,23 @@
 			path = Songage;
 			sourceTree = "<group>";
 		};
+		937C474254FE5C142F992D34 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FB0D8EE0DE37682DFC5499D3 /* Pods_Songage.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F7B1C03A7376ECEFEC02264D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				76AFCCD961B91C06DE8A91A7 /* Pods-Songage.debug.xcconfig */,
+				5F847531C3F00A7FE6932174 /* Pods-Songage.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -71,9 +98,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4071B9921D17E974009B4151 /* Build configuration list for PBXNativeTarget "Songage" */;
 			buildPhases = (
+				501F32302D4211F809F6769C /* [CP] Check Pods Manifest.lock */,
 				4071B97C1D17E974009B4151 /* Sources */,
 				4071B97D1D17E974009B4151 /* Frameworks */,
 				4071B97E1D17E974009B4151 /* Resources */,
+				C6202D82203D06FBA51D4CFB /* [CP] Embed Pods Frameworks */,
+				D4B54497A656A310ABF112A9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -125,11 +155,60 @@
 			files = (
 				4071B98E1D17E974009B4151 /* LaunchScreen.storyboard in Resources */,
 				4071B98B1D17E974009B4151 /* Assets.xcassets in Resources */,
+				4071B99A1D1802DA009B4151 /* Podfile in Resources */,
 				4071B9981D17EA78009B4151 /* ChooseImageViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		501F32302D4211F809F6769C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		C6202D82203D06FBA51D4CFB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Songage/Pods-Songage-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D4B54497A656A310ABF112A9 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Songage/Pods-Songage-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4071B97C1D17E974009B4151 /* Sources */ = {
@@ -240,6 +319,7 @@
 		};
 		4071B9931D17E974009B4151 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 76AFCCD961B91C06DE8A91A7 /* Pods-Songage.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -254,6 +334,7 @@
 		};
 		4071B9941D17E974009B4151 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5F847531C3F00A7FE6932174 /* Pods-Songage.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -285,6 +366,7 @@
 				4071B9941D17E974009B4151 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
