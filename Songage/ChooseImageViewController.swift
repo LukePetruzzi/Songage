@@ -26,6 +26,10 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         // set the delegate of the imagePicker
         imagePicker.delegate = self
         
+        MusixmatchAPIManager.sharedInstance.searchForTracksByLyrics(["balls", "wall"], completion: {(returnStuff, error) in
+            
+        })
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,7 +63,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             self.imagePicker.sourceType = .SavedPhotosAlbum
             self.presentViewController(self.imagePicker, animated: true, completion: nil)
         })
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Destructive, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
         
         alert.addAction(cameraAction)
         alert.addAction(libraryAction)
