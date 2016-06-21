@@ -21,8 +21,10 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     
     // an array that can be added to on subsequent calls of the MusixmatchAPI
     var songsForThisImage:[(trackName:String, trackID:String)] = []
-    // tell when the songs are done coming in
-    var songsForThisImageDoneComingIn = false
+    // number of times songs will come in
+    var numberOfMusixCallsForThisImage = 0
+    // tell how many calls been made so far
+    var musixCallsMadeSoFar = 0
     
     override func viewDidLoad()
     {
@@ -32,7 +34,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         imagePicker.delegate = self
         
         // test musixmatch
-//        MusixmatchAPIManager.sharedInstance.searchForTracksByLyrics(["concert", "transportation system"],presentingViewController: self, completion: searchForTracksComplete)
+        //        MusixmatchAPIManager.sharedInstance.searchForTracksByLyrics(["concert", "transportation system"],presentingViewController: self, completion: searchForTracksComplete)
     }
     
     override func didReceiveMemoryWarning() {
@@ -144,8 +146,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             }
             
             // let the completion function know the calls are done coming in
-            songsForThisImageDoneComingIn = true
-            
+            numberOfMusixCallsForThisImage = (i / 2)
         }
         else
         {
@@ -170,8 +171,20 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         {
             print("LIST OF SONGS RETURNED TO COMPLETION: \(returnedSongs!)")
             
-            // add this chunk to the songsForThisImage
-            songsForThisImage += returnedSongs!
+            if returnedSongs!.count > 0
+            {
+                // add the first and most popular song to the songsForThisImage
+                songsForThisImage.append(returnedSongs![0])
+            }
+            
+            // increment the musix calls
+            musixCallsMadeSoFar += 1
+            
+            // if this was the last call, use all the returned functions
+            if musixCallsMadeSoFar == numberOfMusixCallsForThisImage
+            {
+                getReturnedSongsFromSpotify()
+            }
         }
         else // there was some error
         {
@@ -183,6 +196,21 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             
             // show the alert to the calling viewController
             self.presentViewController(alert, animated: true, completion: nil)
+            
+            // reset the calls made so far cuz this thang done broke
+            self.resetMusixCalls()
         }
+    }
+    
+    func getReturnedSongsFromSpotify()
+    {
+        print("SONGS FOR THIS IMAGE IN THE SPOTIFY CALLER: \(songsForThisImage)")
+    }
+    
+    // reset the variables
+    private func resetMusixCalls()
+    {
+        musixCallsMadeSoFar = 0
+        songsForThisImage = []
     }
 }
