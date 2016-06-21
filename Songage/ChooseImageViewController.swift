@@ -27,7 +27,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         imagePicker.delegate = self
         
         // test musixmatch
-        MusixmatchAPIManager.sharedInstance.searchForTracksByLyrics(["balls", "wall"], completion: {(returnStuff, error) in
+        MusixmatchAPIManager.sharedInstance.searchForTracksByLyrics(["happy"], completion: {(returnStuff, error) in
             
         })
     }

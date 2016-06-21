@@ -57,17 +57,33 @@ class MusixmatchAPIManager
         
         // do things with the reponse
         request.responseJSON { response in
-            print("REQUEST: \(response.request!)")  // original URL request
-            print("RESPONSE: \(response.response!.statusCode)") // URL response
-            print("SERVER DATA: \(response.data!)")     // server data
-            print("RESULT: \(response.result)")   // result of response serialization
-            
+            //            print("REQUEST: \(response.request!)")  // original URL request
+            //            print("RESPONSE: \(response.response!.statusCode)") // URL response
+            //            print("SERVER DATA: \(response.data!)")     // server data
+            //            print("RESULT: \(response.result)")   // result of response serialization
+            //
             if response.result.isSuccess
             {
                 
                 let json = JSON(response.result.value!)
                 
                 print("JSON OF TRACKSEARCH: \(json)")
+                
+                let trackList = json["message"]["body"]["track_list"]
+                
+                var returnTracks:[(trackName:String, trackID:String)] = []
+                
+                for (key, jsonTrack) in trackList
+                {
+                    if jsonTrack["track"]["track_spotify_id"].stringValue != ""
+                    {
+                        print("THIS IS A THING: \(jsonTrack["track"]["track_spotify_id"].stringValue)")
+                        returnTracks += [(trackName: jsonTrack["track"]["track_name"].stringValue, trackID: jsonTrack["track"]["track_spotify_id"].stringValue)]
+                    }
+                }
+                
+                
+                print("THIS IS WHAT I WANT: \(returnTracks)")
                 
             }
             else
