@@ -5,4 +5,9 @@ use_frameworks!
 target 'Songage' do
 pod 'Alamofire', '~> 3.4'
 pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
+pod 'Bolts'
+pod 'FBSDKCoreKit'
+pod 'FBSDKShareKit'
+pod 'FBSDKLoginKit'
+
 end

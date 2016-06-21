@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import FBSDKLoginKit
 
 class ChooseImageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -26,10 +27,16 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         // set the delegate of the imagePicker
         imagePicker.delegate = self
         
+        // test musixmatch
         MusixmatchAPIManager.sharedInstance.searchForTracksByLyrics(["balls", "wall"], completion: {(returnStuff, error) in
             
         })
         
+        
+        // test facebook login button
+        let loginButton = FBSDKLoginButton()
+        loginButton.center = self.view.center
+        self.view.addSubview(loginButton)
     }
 
     override func didReceiveMemoryWarning() {
@@ -132,6 +139,13 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         }
         else{
             print("ERROR IN TAGS COMPLETE: \(error!.localizedDescription)")
+            
+            let alert = UIAlertController(title: "Error", message: error!.localizedDescription, preferredStyle: .Alert)
+            let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+            alert.addAction(okAction)
+            
+            // show the alert to the calling viewController
+            self.presentViewController(alert, animated: true, completion: nil)
         }
         
         

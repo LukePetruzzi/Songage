@@ -32,6 +32,8 @@ class ClarifaiAPIManager
     // saved access token optional
     private var myAccessToken:String?
     
+    private var updatedMyAccessToken:Bool = false
+    
     // check if the manager has a token
     func hasOAuthToken() -> Bool
     {
@@ -74,6 +76,10 @@ class ClarifaiAPIManager
                 self.myAccessToken = String(json["access_token"])
                 
                 print("token saved! token is: \(self.myAccessToken!)")
+                
+                // update token boolean
+                self.updatedMyAccessToken = true
+                
                 completion(error: nil)
             }
             else{
@@ -83,7 +89,7 @@ class ClarifaiAPIManager
     }
     
     // pass in a jpeg image, get back Clarifai's tags for the image
-    func getTagsForImage(jpeg:NSData, completion: (tags: [String]?, error: NSError?) -> Void)
+    func getTagsForImage(jpeg:NSData, presentingViewController:UIViewController? = nil, completion: (tags: [String]?, error: NSError?) -> Void)
     {
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             
@@ -95,10 +101,20 @@ class ClarifaiAPIManager
                 
                 dispatch_group_enter(dispatchGroup)
                 
+                // going to call the auth token so let the boolean know
+                self.updatedMyAccessToken = false
+                // update the token
                 self.getOAuthToken({(error) -> Void in
                     if error != nil
                     {
                         print("Error retreiving token from Clarifai: \(error?.localizedDescription)")
+                        
+                        let alert = UIAlertController(title: "Error", message: error!.localizedDescription, preferredStyle: .Alert)
+                        let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+                        alert.addAction(okAction)
+                        
+                        // show the alert to the calling viewController
+                        presentingViewController?.presentViewController(alert, animated: true, completion: nil)
                     }
                     // let the dispatchGroup know that the closure is finished
                     dispatch_group_leave(dispatchGroup)
@@ -118,6 +134,7 @@ class ClarifaiAPIManager
             
             print("THIS IS THE TOKEN AT START OF FUNCTION: \(self.myAccessToken)")
             
+            // send the request
             let request = Alamofire.request(.POST, "https://api.clarifai.com/v1/tag/", parameters: parameters, encoding: .URL, headers: headers)
             
             var finalValues:[String] = []
@@ -127,20 +144,62 @@ class ClarifaiAPIManager
                 
                 if response.result.isSuccess
                 {
-                    
-                    let json = JSON(response.result.value!)
-                    
-                    print("JSON: \(json)")
-                    let tagsForImage = json["results"][0]["result"]["tag"]["classes"]
-                    
-                    // append all the values of the tags to the array
-                    for element in tagsForImage.arrayObject!
+                    if response.response!.statusCode == 200
                     {
-                        finalValues.append(element as! String)
+                        
+                        let json = JSON(response.result.value!)
+                        
+                        print("JSON: \(json)")
+                        let tagsForImage = json["results"][0]["result"]["tag"]["classes"]
+                        
+                        // append all the values of the tags to the array
+                        for element in tagsForImage.arrayObject!
+                        {
+                            finalValues.append(element as! String)
+                        }
+                        
+                        // send back the completion function with the values of the tags
+                        completion(tags: finalValues, error: nil)
                     }
-                    
-                    // send back the completion function with the values of the tags
-                    completion(tags: finalValues, error: nil)
+                    else if response.response!.statusCode == 401 // There is a problem with the token. Probably too old. Refresh it
+                    {
+                        dispatch_group_enter(dispatchGroup)
+                        
+                        // going to call the auth token so let the boolean know
+                        self.updatedMyAccessToken = false
+                        // update the token
+                        self.getOAuthToken({(error) -> Void in
+                            if error != nil
+                            {
+                                print("Error retreiving token from Clarifai: \(error?.localizedDescription)")
+                            }
+                            // let the dispatchGroup know that the closure is finished
+                            dispatch_group_leave(dispatchGroup)
+                        })
+                        
+                        // wait until anAsyncMethod is completed
+                        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
+                        
+                        if !self.updatedMyAccessToken
+                        {
+                            let alert = UIAlertController(title: "Error", message: "There was a problem retreiving information from the server. Check you are connected to the internet", preferredStyle: .Alert)
+                            let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+                            alert.addAction(okAction)
+                            
+                            // show the alert to the calling viewController
+                            presentingViewController?.presentViewController(alert, animated: true, completion: nil)
+                        }
+                        else // token updated successfully
+                        {
+                            // call the function again with the new access token
+                            self.getTagsForImage(jpeg, presentingViewController: presentingViewController, completion: completion)
+                        }
+                    }
+                    else // there was some other error that I ain't touching
+                    {
+                        // return the error if there is one
+                        completion(tags: nil, error: response.result.error)
+                    }
                 }
                 else // there was some error. return it.
                 {
