@@ -18,6 +18,7 @@
 		4071B9D01D19EA30009B4151 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4071B9CF1D19EA30009B4151 /* AVFoundation.framework */; };
 		4071B9D21D19EA42009B4151 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4071B9D11D19EA42009B4151 /* SystemConfiguration.framework */; };
 		4071B9D41D19ED1C009B4151 /* Spotify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4071B9D31D19ED1C009B4151 /* Spotify.framework */; };
+		4071B9D71D1A0210009B4151 /* SpotifyAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4071B9D61D1A0210009B4151 /* SpotifyAPIManager.swift */; };
 		A9D1EC0CFD323264774DB1A9 /* Pods_Songage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB0D8EE0DE37682DFC5499D3 /* Pods_Songage.framework */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +37,7 @@
 		4071B9D11D19EA42009B4151 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4071B9D31D19ED1C009B4151 /* Spotify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Spotify.framework; sourceTree = "<group>"; };
 		4071B9D51D19F257009B4151 /* Songage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Songage-Bridging-Header.h"; sourceTree = "<group>"; };
+		4071B9D61D1A0210009B4151 /* SpotifyAPIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyAPIManager.swift; sourceTree = "<group>"; };
 		5F847531C3F00A7FE6932174 /* Pods-Songage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Songage.release.xcconfig"; path = "Pods/Target Support Files/Pods-Songage/Pods-Songage.release.xcconfig"; sourceTree = "<group>"; };
 		76AFCCD961B91C06DE8A91A7 /* Pods-Songage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Songage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Songage/Pods-Songage.debug.xcconfig"; sourceTree = "<group>"; };
 		FB0D8EE0DE37682DFC5499D3 /* Pods_Songage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Songage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,6 +97,7 @@
 			children = (
 				4071B99C1D181293009B4151 /* ClarifaiAPIManager.swift */,
 				4071B99E1D18A84B009B4151 /* MusixmatchAPIManager.swift */,
+				4071B9D61D1A0210009B4151 /* SpotifyAPIManager.swift */,
 			);
 			name = APIManagers;
 			sourceTree = "<group>";
@@ -246,6 +249,7 @@
 				4071B9841D17E974009B4151 /* AppDelegate.swift in Sources */,
 				4071B99F1D18A84B009B4151 /* MusixmatchAPIManager.swift in Sources */,
 				4071B99D1D181293009B4151 /* ClarifaiAPIManager.swift in Sources */,
+				4071B9D71D1A0210009B4151 /* SpotifyAPIManager.swift in Sources */,
 				4071B9971D17EA78009B4151 /* ChooseImageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
