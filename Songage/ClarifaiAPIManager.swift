@@ -47,52 +47,9 @@ class ClarifaiAPIManager
         }
     }
     
-    // get an auth token from Clarifai
-    func getOAuthToken(completion: (error: NSError?) -> Void)
-    {
-        // going to call the auth token so let the boolean know
-        self.updatedMyAccessToken = false
-        
-        // create the parameters for the request
-        let parameters = [
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "grant_type": "client_credentials"
-        ]
-        
-        // send the request
-        let request = Alamofire.request(.POST, "https://api.clarifai.com/v1/token/", parameters: parameters)
-        
-        // do things with the reponse
-        request.responseJSON { response in
-            //            print("REQUEST: \(response.request!)")  // original URL request
-            //            print("RESPONSE: \(response.response!.statusCode)") // URL response
-            //            print("SERVER DATA: \(response.data!)")     // server data
-            //            print("RESULT: \(response.result)")   // result of response serialization
-            
-            if response.result.isSuccess
-            {
-                
-                let json = JSON(response.result.value!)
-                
-                // save the token
-                self.myAccessToken = String(json["access_token"])
-                
-                print("token saved! token is: \(self.myAccessToken!)")
-                
-                // update token boolean
-                self.updatedMyAccessToken = true
-                
-                completion(error: nil)
-            }
-            else{
-                completion(error: response.result.error)
-            }
-        }
-    }
     
     // pass in a jpeg image, get back Clarifai's tags for the image
-    func getTagsForImage(jpeg:NSData, presentingViewController:UIViewController? = nil, completion: (tags: [String]?, error: NSError?) -> Void)
+    func getTagsForImage(jpeg:NSData, presentingViewController:UIViewController?, completion: (tags: [String]?, error: NSError?) -> Void)
     {
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             
@@ -207,6 +164,48 @@ class ClarifaiAPIManager
         }
     }
     
+    
+    // Private helper functions
+    // get an auth token from Clarifai
+    private func getOAuthToken(completion: (error: NSError?) -> Void)
+    {
+        // going to call the auth token so let the boolean know
+        self.updatedMyAccessToken = false
+        
+        // create the parameters for the request
+        let parameters = [
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "grant_type": "client_credentials"
+        ]
+        
+        // send the request
+        let request = Alamofire.request(.POST, "https://api.clarifai.com/v1/token/", parameters: parameters)
+        
+        // do things with the reponse
+        request.responseJSON { response in
+            
+            if response.result.isSuccess
+            {
+                
+                let json = JSON(response.result.value!)
+                
+                // save the token
+                self.myAccessToken = String(json["access_token"])
+                
+                print("token saved! token is: \(self.myAccessToken!)")
+                
+                // update token boolean
+                self.updatedMyAccessToken = true
+                
+                completion(error: nil)
+            }
+            else
+            {
+                completion(error: response.result.error)
+            }
+        }
+    }
     
     
     

@@ -19,6 +19,11 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     // create an image picker to use when add photo button is tapped
     let imagePicker = UIImagePickerController()
     
+    // an array that can be added to on subsequent calls of the MusixmatchAPI
+    var songsForThisImage:[(trackName:String, trackID:String)] = []
+    // tell when the songs are done coming in
+    var songsForThisImageDoneComingIn = false
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -27,9 +32,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         imagePicker.delegate = self
         
         // test musixmatch
-        MusixmatchAPIManager.sharedInstance.searchForTracksByLyrics(["happy"], completion: {(returnStuff, error) in
-            
-        })
+//        MusixmatchAPIManager.sharedInstance.searchForTracksByLyrics(["concert", "transportation system"],presentingViewController: self, completion: searchForTracksComplete)
     }
     
     override func didReceiveMemoryWarning() {
@@ -129,6 +132,20 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         if tags != nil
         {
             print("Returned tags: \(tags!)")
+            
+            var i = 0
+            // only do 5 API calls (two per hit) or exhaust the tags
+            while (i < tags!.count - 1 && i < 10)
+            {
+                MusixmatchAPIManager.sharedInstance.searchForTracksByLyrics([tags![i],tags![i + 1]],presentingViewController: self, completion: searchForTracksComplete)
+                
+                // increment i twice... using two tags per call
+                i += 2
+            }
+            
+            // let the completion function know the calls are done coming in
+            songsForThisImageDoneComingIn = true
+            
         }
         else
         {
@@ -147,4 +164,25 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         createSongageButton.enabled = true
     }
     
+    func searchForTracksComplete(returnedSongs: [(trackName:String, trackID:String)]?, error: NSError?)
+    {
+        if returnedSongs != nil
+        {
+            print("LIST OF SONGS RETURNED TO COMPLETION: \(returnedSongs!)")
+            
+            // add this chunk to the songsForThisImage
+            songsForThisImage += returnedSongs!
+        }
+        else // there was some error
+        {
+            print("ERROR IN SearchForSongs COMPLETE: \(error!.localizedDescription)")
+            
+            let alert = UIAlertController(title: "Error", message: error!.localizedDescription, preferredStyle: .Alert)
+            let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+            alert.addAction(okAction)
+            
+            // show the alert to the calling viewController
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+    }
 }
