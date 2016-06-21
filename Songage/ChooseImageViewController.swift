@@ -9,10 +9,9 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
-import FBSDKLoginKit
 
 class ChooseImageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+    
     // create all outlets
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var createSongageButton: UIButton!
@@ -31,14 +30,8 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         MusixmatchAPIManager.sharedInstance.searchForTracksByLyrics(["balls", "wall"], completion: {(returnStuff, error) in
             
         })
-        
-        
-        // test facebook login button
-        let loginButton = FBSDKLoginButton()
-        loginButton.center = self.view.center
-        self.view.addSubview(loginButton)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -117,7 +110,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             let jpeg = UIImageJPEGRepresentation(self.imageView.image!, 0.9)!
             
             // get the tags for the image
-            ClarifaiAPIManager.sharedInstance.getTagsForImage(jpeg, completion: getTagsComplete)
+            ClarifaiAPIManager.sharedInstance.getTagsForImage(jpeg, presentingViewController: self, completion: getTagsComplete)
         }
         else
         {
@@ -137,7 +130,8 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         {
             print("Returned tags: \(tags!)")
         }
-        else{
+        else
+        {
             print("ERROR IN TAGS COMPLETE: \(error!.localizedDescription)")
             
             let alert = UIAlertController(title: "Error", message: error!.localizedDescription, preferredStyle: .Alert)

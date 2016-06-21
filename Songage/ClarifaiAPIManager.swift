@@ -50,6 +50,9 @@ class ClarifaiAPIManager
     // get an auth token from Clarifai
     func getOAuthToken(completion: (error: NSError?) -> Void)
     {
+        // going to call the auth token so let the boolean know
+        self.updatedMyAccessToken = false
+        
         // create the parameters for the request
         let parameters = [
             "client_id": client_id,
@@ -101,20 +104,12 @@ class ClarifaiAPIManager
                 
                 dispatch_group_enter(dispatchGroup)
                 
-                // going to call the auth token so let the boolean know
-                self.updatedMyAccessToken = false
                 // update the token
-                self.getOAuthToken({(error) -> Void in
-                    if error != nil
+                self.getOAuthToken({(thisError) -> Void in
+                    if thisError != nil
                     {
-                        print("Error retreiving token from Clarifai: \(error?.localizedDescription)")
-                        
-                        let alert = UIAlertController(title: "Error", message: error!.localizedDescription, preferredStyle: .Alert)
-                        let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
-                        alert.addAction(okAction)
-                        
-                        // show the alert to the calling viewController
-                        presentingViewController?.presentViewController(alert, animated: true, completion: nil)
+                        // call the completion
+                        completion(tags: nil, error: thisError)
                     }
                     // let the dispatchGroup know that the closure is finished
                     dispatch_group_leave(dispatchGroup)
@@ -122,6 +117,13 @@ class ClarifaiAPIManager
                 
                 // wait until anAsyncMethod is completed
                 dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
+                
+                // if the token didn't update...
+                if !self.updatedMyAccessToken
+                {
+                    // get out of the getTagsForImage function
+                    return
+                }
             }
             
             
@@ -165,8 +167,6 @@ class ClarifaiAPIManager
                     {
                         dispatch_group_enter(dispatchGroup)
                         
-                        // going to call the auth token so let the boolean know
-                        self.updatedMyAccessToken = false
                         // update the token
                         self.getOAuthToken({(error) -> Void in
                             if error != nil
