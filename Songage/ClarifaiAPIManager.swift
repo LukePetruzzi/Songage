@@ -108,7 +108,7 @@ class ClarifaiAPIManager
                 self.getOAuthToken({(thisError) -> Void in
                     if thisError != nil
                     {
-                        // call the completion
+                        // call the completion with error from getToken function
                         completion(tags: nil, error: thisError)
                     }
                     // let the dispatchGroup know that the closure is finished
@@ -168,10 +168,11 @@ class ClarifaiAPIManager
                         dispatch_group_enter(dispatchGroup)
                         
                         // update the token
-                        self.getOAuthToken({(error) -> Void in
-                            if error != nil
+                        self.getOAuthToken({(thisError) -> Void in
+                            if thisError != nil
                             {
-                                print("Error retreiving token from Clarifai: \(error?.localizedDescription)")
+                                // call the completion with error from getToken function
+                                completion(tags: nil, error: thisError)
                             }
                             // let the dispatchGroup know that the closure is finished
                             dispatch_group_leave(dispatchGroup)
@@ -182,12 +183,8 @@ class ClarifaiAPIManager
                         
                         if !self.updatedMyAccessToken
                         {
-                            let alert = UIAlertController(title: "Error", message: "There was a problem retreiving information from the server. Check you are connected to the internet", preferredStyle: .Alert)
-                            let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
-                            alert.addAction(okAction)
-                            
-                            // show the alert to the calling viewController
-                            presentingViewController?.presentViewController(alert, animated: true, completion: nil)
+                            // get out of the getTagsForImage function
+                            return
                         }
                         else // token updated successfully
                         {
