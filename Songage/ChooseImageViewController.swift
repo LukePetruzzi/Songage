@@ -15,7 +15,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     // create all outlets
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var createSongageButton: UIButton!
-
+    
     // create an image picker to use when add photo button is tapped
     let imagePicker = UIImagePickerController()
     
@@ -234,13 +234,32 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     {
         print("SONG IDs FOR THIS IMAGE IN THE SPOTIFY CALLER: \(songsIDsForThisImage)")
         
-        // save the parameters I wanna pass to the next viewController
-        SongsList.sharedInstance.setSongsList(songsIDsForThisImage)
-        SongsList.sharedInstance.setCurrentImage(imageView.image!)
         
-        // present the next view controller
-        self.presentViewController(PlayReturnedSongsViewController(), animated: true, completion: nil)
-        
+        // get the tracks
+        SpotifyAPIManager.sharedInstance.getSpotifyTracks(songsIDsForThisImage, completion: {(returnedTracks:[SPTTrack]?, error:NSError?) in
+            
+            // update the session if no errors
+            if error != nil
+            {
+                let alert = UIAlertController(title: "Error", message: "Error getting Spotify tracks:\n\(error!.localizedDescription)", preferredStyle: .Alert)
+                let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+                alert.addAction(okAction)
+                
+                // show the alert to the calling viewController
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
+            else // no error
+            {
+                // save the tracks
+                SongsList.sharedInstance.setSongsList(returnedTracks)
+                
+                // save the imageView
+                SongsList.sharedInstance.setCurrentImage(self.imageView.image!)
+                
+                // present the next view controller
+                self.presentViewController(PlayReturnedSongsViewController(), animated: true, completion: nil)
+            }
+        })
     }
     
     // reset the variables

@@ -68,6 +68,34 @@ class SpotifyAPIManager
         
     }
     
+    
+    func getSpotifyTracks(spotifyTrackIDs:[String], completion: (returnedTracks:[SPTTrack]?, error:NSError?) -> Void)
+    {
+        // format the IDs into URIs to send to Spotify
+        var trackURIs:[NSURL] = []
+        for trackID in spotifyTrackIDs {
+            trackURIs.append(NSURL(string: "spotify:track:\(trackID)")!)
+        }
+        
+        // if doesnt work prolly cuz of trackURIs??
+        SPTTrack.tracksWithURIs(trackURIs, session: SPTAuth.defaultInstance().session, callback: {(error:NSError!, trackObject:AnyObject!) -> Void in
+            
+            // check for errors
+            if error != nil
+            {
+                completion(returnedTracks: nil, error: error)
+                return
+            }
+            else // no errors
+            {
+                // get the tracks and return them
+                let tracksToReturn:[SPTTrack] = trackObject as! [SPTTrack]
+                
+                completion(returnedTracks: tracksToReturn, error: nil)
+            }
+        })
+    }
+    
     // return the session or nil if there was an error when updating
     func updateSessionIfNeeded(completion:((error:NSError?) -> Void))
     {

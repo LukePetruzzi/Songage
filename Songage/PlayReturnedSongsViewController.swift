@@ -9,20 +9,45 @@
 import UIKit
 
 class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     @IBOutlet weak var analyzedPhotoImageView: UIImageView!
     @IBOutlet weak var songsTableView: UITableView!
     
+    // the tracks 
+    // get all the tracks for this list of songIDs
+    var tracks:[SPTTrack]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // put the photo in the imageView
-        analyzedPhotoImageView.image = SongsList.sharedInstance.getCurrentImage()
         
         // set up the tableView
         self.setupTableView()
-    }
+        
+        // put the photo in the imageView
+        analyzedPhotoImageView.image = SongsList.sharedInstance.getCurrentImage()
+        tracks = SongsList.sharedInstance.getSongsList()
 
+    }
+    
+    override func viewWillAppear(animated: Bool)
+    {
+        
+        // update the session if needed
+        SpotifyAPIManager.sharedInstance.updateSessionIfNeeded({(error) in
+            
+            // update the session if no errors
+            if error != nil
+            {
+                let alert = UIAlertController(title: "Error", message: "Error updating Spotify session:\n\(error!.localizedDescription)", preferredStyle: .Alert)
+                let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+                alert.addAction(okAction)
+                
+                // show the alert to the calling viewController
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
+        })
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -39,9 +64,9 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         
         // set the height
         songsTableView.rowHeight = CGFloat(85)
-
+        
     }
-
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return (SongsList.sharedInstance.getSongsList()?.count)!
@@ -49,14 +74,27 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
-        
-        
         let cell = songsTableView.dequeueReusableCellWithIdentifier("SpotifyPlayerTableViewCell") as! SpotifyPlayerTableViewCell
         
-        
-        
+        // get the data for the cell
+        if tracks != nil
+        {
+            let currentTrack = tracks![indexPath.row]
+            
+            cell.songTitleLabel.text = currentTrack.name
+            cell.artistLabel.text = currentTrack.artists[0] as? String
+            cell.albumNameLabel.text = currentTrack.album.name
+            
+            
+        }
         
         return cell
     }
+    
+    @IBAction func newSongageButtonTapped(sender: UIButton)
+    {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     
 }

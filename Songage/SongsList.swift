@@ -25,19 +25,19 @@ class SongsList
     }
     
     // list of songs for the current list
-    private var currentSongsList:[String]?
+    private var currentTracksList:[SPTTrack]?
     
     // image that the user is currently sending
     private var currentImage:UIImage?
     
-    func setSongsList(newSongsList:[String]?)
+    func setSongsList(newSongsList:[SPTTrack]?)
     {
-        self.currentSongsList = newSongsList
+        self.currentTracksList = newSongsList
     }
     
-    func getSongsList() -> [String]?
+    func getSongsList() -> [SPTTrack]?
     {
-        return self.currentSongsList
+        return self.currentTracksList
     }
     
     func setCurrentImage(newImage:UIImage)
