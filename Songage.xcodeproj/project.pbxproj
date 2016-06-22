@@ -19,6 +19,8 @@
 		4071B9D21D19EA42009B4151 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4071B9D11D19EA42009B4151 /* SystemConfiguration.framework */; };
 		4071B9D41D19ED1C009B4151 /* Spotify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4071B9D31D19ED1C009B4151 /* Spotify.framework */; };
 		4071B9D71D1A0210009B4151 /* SpotifyAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4071B9D61D1A0210009B4151 /* SpotifyAPIManager.swift */; };
+		4071B9FC1D1AB908009B4151 /* SpotifyLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4071B9FA1D1AB908009B4151 /* SpotifyLoginViewController.swift */; };
+		4071B9FD1D1AB908009B4151 /* SpotifyLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4071B9FB1D1AB908009B4151 /* SpotifyLoginViewController.xib */; };
 		A9D1EC0CFD323264774DB1A9 /* Pods_Songage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB0D8EE0DE37682DFC5499D3 /* Pods_Songage.framework */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +40,8 @@
 		4071B9D31D19ED1C009B4151 /* Spotify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Spotify.framework; sourceTree = "<group>"; };
 		4071B9D51D19F257009B4151 /* Songage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Songage-Bridging-Header.h"; sourceTree = "<group>"; };
 		4071B9D61D1A0210009B4151 /* SpotifyAPIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyAPIManager.swift; sourceTree = "<group>"; };
+		4071B9FA1D1AB908009B4151 /* SpotifyLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyLoginViewController.swift; sourceTree = "<group>"; };
+		4071B9FB1D1AB908009B4151 /* SpotifyLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpotifyLoginViewController.xib; sourceTree = "<group>"; };
 		5F847531C3F00A7FE6932174 /* Pods-Songage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Songage.release.xcconfig"; path = "Pods/Target Support Files/Pods-Songage/Pods-Songage.release.xcconfig"; sourceTree = "<group>"; };
 		76AFCCD961B91C06DE8A91A7 /* Pods-Songage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Songage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Songage/Pods-Songage.debug.xcconfig"; sourceTree = "<group>"; };
 		FB0D8EE0DE37682DFC5499D3 /* Pods_Songage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Songage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,13 +84,12 @@
 			isa = PBXGroup;
 			children = (
 				4071B99B1D18126C009B4151 /* APIManagers */,
+				4071B9FE1D1AB910009B4151 /* Views */,
 				4071B9831D17E974009B4151 /* AppDelegate.swift */,
 				4071B9991D1802DA009B4151 /* Podfile */,
 				4071B98A1D17E974009B4151 /* Assets.xcassets */,
 				4071B98C1D17E974009B4151 /* LaunchScreen.storyboard */,
 				4071B98F1D17E974009B4151 /* Info.plist */,
-				4071B9951D17EA78009B4151 /* ChooseImageViewController.swift */,
-				4071B9961D17EA78009B4151 /* ChooseImageViewController.xib */,
 				4071B9D51D19F257009B4151 /* Songage-Bridging-Header.h */,
 			);
 			path = Songage;
@@ -100,6 +103,17 @@
 				4071B9D61D1A0210009B4151 /* SpotifyAPIManager.swift */,
 			);
 			name = APIManagers;
+			sourceTree = "<group>";
+		};
+		4071B9FE1D1AB910009B4151 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4071B9951D17EA78009B4151 /* ChooseImageViewController.swift */,
+				4071B9961D17EA78009B4151 /* ChooseImageViewController.xib */,
+				4071B9FA1D1AB908009B4151 /* SpotifyLoginViewController.swift */,
+				4071B9FB1D1AB908009B4151 /* SpotifyLoginViewController.xib */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		937C474254FE5C142F992D34 /* Frameworks */ = {
@@ -186,6 +200,7 @@
 			files = (
 				4071B98E1D17E974009B4151 /* LaunchScreen.storyboard in Resources */,
 				4071B98B1D17E974009B4151 /* Assets.xcassets in Resources */,
+				4071B9FD1D1AB908009B4151 /* SpotifyLoginViewController.xib in Resources */,
 				4071B99A1D1802DA009B4151 /* Podfile in Resources */,
 				4071B9981D17EA78009B4151 /* ChooseImageViewController.xib in Resources */,
 			);
@@ -250,6 +265,7 @@
 				4071B99F1D18A84B009B4151 /* MusixmatchAPIManager.swift in Sources */,
 				4071B99D1D181293009B4151 /* ClarifaiAPIManager.swift in Sources */,
 				4071B9D71D1A0210009B4151 /* SpotifyAPIManager.swift in Sources */,
+				4071B9FC1D1AB908009B4151 /* SpotifyLoginViewController.swift in Sources */,
 				4071B9971D17EA78009B4151 /* ChooseImageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

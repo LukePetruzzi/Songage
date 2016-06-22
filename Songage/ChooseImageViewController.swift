@@ -19,6 +19,9 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     // create an image picker to use when add photo button is tapped
     let imagePicker = UIImagePickerController()
     
+    // has an image been added yet?
+    var anyImageLoaded = false
+    
     // an array that can be added to on subsequent calls of the MusixmatchAPI
     var songsForThisImage:[(trackName:String, trackID:String)] = []
     // number of times songs will come in
@@ -26,12 +29,16 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     // tell how many calls been made so far
     var musixCallsMadeSoFar = 0
     
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
         
         // set the delegate of the imagePicker
         imagePicker.delegate = self
+        
+        // ensure no image loaded
+        anyImageLoaded = false
         
         // test musixmatch
         //        MusixmatchAPIManager.sharedInstance.searchForTracksByLyrics(["concert", "transportation system"],presentingViewController: self, completion: searchForTracksComplete)
@@ -93,6 +100,9 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             imageView.image = pickedImage
         }
         
+        // an image has been loaded.
+        self.anyImageLoaded = true
+        
         dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -106,7 +116,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     @IBAction func createSongageTapped(sender: UIButton)
     {
         // dont make the request unless an image is picked
-        if imageView.image! != UIImage(named: "defaultImage")
+        if anyImageLoaded == true
         {
             // disable button until completion function is finished
             createSongageButton.enabled = false
@@ -117,8 +127,11 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             // get the tags for the image
             ClarifaiAPIManager.sharedInstance.getTagsForImage(jpeg, presentingViewController: self, completion: getTagsComplete)
         }
-        else
-        {
+        else // no image loaded yet
+        {   // test
+//            let url = NSURL(string: "https://google.com")!
+//            UIApplication.sharedApplication().openURL(url)
+            
             // create and show an alert that the user has no image selected
             let alert = UIAlertController(title: "No Image", message: "To create a Songage, supply an image!", preferredStyle: .ActionSheet)
             let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)

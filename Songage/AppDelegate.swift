@@ -20,27 +20,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Create the window
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window?.makeKeyAndVisible()
-        self.window?.rootViewController = ChooseImageViewController(nibName: "ChooseImageViewController", bundle: nil)
+        self.window?.rootViewController = SpotifyLoginViewController(nibName: "SpotifyLoginViewController", bundle: nil)
         
         // allow facebook to track installs and app opens
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         
-        // spotify test stuff
-        // set the clientID
-        SPTAuth.defaultInstance().clientID = "2bb2c1d0c40c47e4940855b6b1f56112"
-        // set the redirect URL for after I make a call
-        SPTAuth.defaultInstance().redirectURL = NSURL(string: "songage://returnAfterLogin")
-        // set the scopes... there's only one needed
-        SPTAuth.defaultInstance().requestedScopes = [SPTAuthStreamingScope]
         
-        // construct a URL and open it
-        let loginURL:NSURL = SPTAuth.defaultInstance().loginURL
-        
-        // open the url with the application delegate function
-        application.performSelector(#selector(application.openURL(_:)), withObject: loginURL, afterDelay: 0.1)
-        
-        // Override point for customization after application launch.
         return true
     }
     
@@ -48,26 +34,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // allow facebook to track installs and app opens
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool
     {
-        if SPTAuth.defaultInstance().canHandleURL(url)
+        print("HERE's THE SCHEME: \(url.scheme)")
+        
+        // handle spotify's schemes
+        if url.scheme == "songage"
         {
-            SPTAuth.defaultInstance().handleAuthCallbackWithTriggeredAuthURL(url, callback: {(error:NSError!, sptSession:SPTSession!) in
-                
-                if error != nil
-                {
-                    print("ERROR IN THE SPOTIFY AUTH: \(error.localizedDescription)")
-                }
-                
-                print("I HAVE A SPOTIFY SESSION: \(sptSession.accessToken)")
-                // save the session
-                SPTAuth.defaultInstance().session = sptSession
-            })
             
-            return true
+        } // handle facebook's schemes
+        else if url.scheme == "fb1074091485995679"
+        {
+            
+            return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
         }
         
         return false
-        
-        //return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
     }
     
     func applicationWillResignActive(application: UIApplication) {
