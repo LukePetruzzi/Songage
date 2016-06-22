@@ -46,7 +46,7 @@ class MusixmatchAPIManager
         let parameters:[String : String] = [
             "q_lyrics": lyricsString,
             "s_track_rating": "desc",
-            "page_size": String(3),
+            "page_size": String(7),
             "apikey": self.apikey
         ]
         

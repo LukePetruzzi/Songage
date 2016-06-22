@@ -23,7 +23,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     var anyImageLoaded = false
     
     // an array that can be added to on subsequent calls of the MusixmatchAPI
-    var songsForThisImage:[(trackName:String, trackID:String)] = []
+    var songsIDsForThisImage:[String] = []
     // number of times songs will come in
     var numberOfMusixCallsForThisImage = 0
     // tell how many calls been made so far
@@ -202,7 +202,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             if returnedSongs!.count > 0
             {
                 // add the first and most popular song to the songsForThisImage
-                songsForThisImage.append(returnedSongs![0])
+                songsIDsForThisImage.append(returnedSongs![0].trackID)
             }
             
             // increment the musix calls
@@ -232,13 +232,21 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     
     func getReturnedSongsFromSpotify()
     {
-        print("SONGS FOR THIS IMAGE IN THE SPOTIFY CALLER: \(songsForThisImage)")
+        print("SONG IDs FOR THIS IMAGE IN THE SPOTIFY CALLER: \(songsIDsForThisImage)")
+        
+        // save the parameters I wanna pass to the next viewController
+        SongsList.sharedInstance.setSongsList(songsIDsForThisImage)
+        SongsList.sharedInstance.setCurrentImage(imageView.image!)
+        
+        // present the next view controller
+        self.presentViewController(PlayReturnedSongsViewController(), animated: true, completion: nil)
+        
     }
     
     // reset the variables
     private func resetMusixCalls()
     {
         musixCallsMadeSoFar = 0
-        songsForThisImage = []
+        songsIDsForThisImage = []
     }
 }

@@ -23,6 +23,9 @@ class SpotifyAPIManager
         return Static.instance!
     }
     
+    // Audio player for spotify stuff
+    var player:SPTAudioStreamingController?
+    
     // Spotify constants
     let kClientID = "2bb2c1d0c40c47e4940855b6b1f56112"
     let kCallbackURL = "songage://returnAfterLogin"
@@ -59,6 +62,12 @@ class SpotifyAPIManager
     }
     
     
+    
+    func playSongUsingSpotify(spotifySongID:String)
+    {
+        
+    }
+    
     // return the session or nil if there was an error when updating
     func updateSessionIfNeeded(completion:((error:NSError?) -> Void))
     {
@@ -93,14 +102,14 @@ class SpotifyAPIManager
                         userDefaults.synchronize()
                         
                         // update my session
-                        print("SESSION UPDATED SUCCESSFULLY!")
+                        print("SPOTIFY SESSION UPDATED SUCCESSFULLY!")
                         SPTAuth.defaultInstance().session = newSession
                         
                         completion(error: nil)
                     }
                     else
                     {
-                        print("ERROR IN SESSION RENEWAL: \(error.localizedDescription)")
+                        print("ERROR IN SPOTIFY SESSION RENEWAL: \(error.localizedDescription)")
                         // session not renewed
                         completion(error: error)
                     }
@@ -113,11 +122,12 @@ class SpotifyAPIManager
             }
             else // old session is still valid. Return and use it
             {
-                print("SESSION IS STILL VALID!")
+                print("SPOTIFY SESSION IS STILL VALID!")
                 SPTAuth.defaultInstance().session = oldSession
                 completion(error: nil)
             }
         }
     }
+    
     
 }
