@@ -20,11 +20,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Create the window
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window?.makeKeyAndVisible()
-        self.window?.rootViewController = SpotifyLoginViewController(nibName: "SpotifyLoginViewController", bundle: nil)
         
         // allow facebook to track installs and app opens
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
+        // get my spotify stuff up to speed
+        SpotifyAPIManager.sharedInstance.initializeSpotifyManager()
+        
+        // check for spotify session. If we don't have one yet, send user to the login screen
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let _:AnyObject = userDefaults.objectForKey("SpotifySession")
+        {
+            // the session is available. Send user to main screen
+            self.window?.rootViewController = ChooseImageViewController(nibName: "ChooseImageViewController", bundle: nil)
+
+        }
+        else
+        {
+            // session not available. Send user to spotify login screen
+            self.window?.rootViewController = SpotifyLoginViewController(nibName: "SpotifyLoginViewController", bundle: nil)
+
+        }
         
         
         return true
@@ -39,6 +55,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // handle spotify's schemes
         if url.scheme == "songage"
         {
+            // check that spotify can hendle the URL it was handed
+            if SPTAuth.defaultInstance().canHandleURL(url)
+            {
+                // let spotify handle the url
+                SPTAuth.defaultInstance().handleAuthCallbackWithTriggeredAuthURL(url, callback: {(error:NSError!, session:SPTSession!) -> Void in
+                    
+                    // check if there's an error
+                    if error != nil
+                    {
+                        print("SPOTIFY AUTHENTIFICATION ERROR IN APPDELEGATE: \(error.localizedDescription)")
+                        return // get out of the callback
+                    }
+                    else // no error!
+                    {
+                        // create user defaults stuff so I can access the session forever and ever
+                        let userDefaults = NSUserDefaults.standardUserDefaults()
+                        let sessionData = NSKeyedArchiver.archivedDataWithRootObject(session)
+                        userDefaults.setObject(sessionData, forKey: "SpotifySession")
+                        userDefaults.synchronize()
+                        
+                        // the session is now available and saved. Send user to main screen
+                        self.window?.rootViewController = ChooseImageViewController(nibName: "ChooseImageViewController", bundle: nil)
+                    }
+                })
+            }
+            else {
+                print("SPOTIFY CANT HANDLE THE URL")
+            }
             
         } // handle facebook's schemes
         else if url.scheme == "fb1074091485995679"

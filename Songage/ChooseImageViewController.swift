@@ -15,6 +15,10 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     // create all outlets
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var createSongageButton: UIButton!
+
+    
+    // keep a session object that I update
+    var spotifySession:SPTSession!
     
     // create an image picker to use when add photo button is tapped
     let imagePicker = UIImagePickerController()
@@ -39,9 +43,28 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         
         // ensure no image loaded
         anyImageLoaded = false
-        
-        // test musixmatch
-        //        MusixmatchAPIManager.sharedInstance.searchForTracksByLyrics(["concert", "transportation system"],presentingViewController: self, completion: searchForTracksComplete)
+    }
+    
+    override func viewWillAppear(animated: Bool)
+    {
+        // update the session if needed
+        SpotifyAPIManager.sharedInstance.updateSessionIfNeeded({(returnedSession, error) in
+            
+            // update the session if no errors
+            if returnedSession != nil
+            {
+                self.spotifySession = returnedSession
+            }
+            else
+            {
+                let alert = UIAlertController(title: "Error", message: "Error updating Spotify session: \(error!.localizedDescription)", preferredStyle: .Alert)
+                let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+                alert.addAction(okAction)
+                
+                // show the alert to the calling viewController
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
+        })
     }
     
     override func didReceiveMemoryWarning() {
@@ -129,8 +152,8 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         }
         else // no image loaded yet
         {   // test
-//            let url = NSURL(string: "https://google.com")!
-//            UIApplication.sharedApplication().openURL(url)
+            //            let url = NSURL(string: "https://google.com")!
+            //            UIApplication.sharedApplication().openURL(url)
             
             // create and show an alert that the user has no image selected
             let alert = UIAlertController(title: "No Image", message: "To create a Songage, supply an image!", preferredStyle: .ActionSheet)

@@ -23,6 +23,86 @@ class SpotifyAPIManager
         return Static.instance!
     }
     
+    // Spotify constants
+    let kClientID = "2bb2c1d0c40c47e4940855b6b1f56112"
+    let kCallbackURL = "songage://returnAfterLogin"
+    let kTokenSwapURL = "http://localhost:1234/swap"
+    let kTokenRefreshServiceURL = "http://localhost:1234/refresh"
     
+    func initializeSpotifyManager()
+    {
+        let auth = SPTAuth.defaultInstance()
+        
+        // set all parameters for the login url
+        auth.clientID = kClientID
+        auth.redirectURL = NSURL(string: kCallbackURL)
+        auth.tokenSwapURL = NSURL(string: kTokenSwapURL)
+        auth.tokenRefreshURL = NSURL(string: kTokenRefreshServiceURL)
+        
+        // set the scopes for login... SUPER IMPORTANT THAT I SET ALL THE SCOPES I WANT TO USE
+        auth.requestedScopes = [SPTAuthStreamingScope]
+    }
+    
+    
+    // return the session or nil if there was an error when updating
+    func updateSessionIfNeeded(completion:((returnedSession:SPTSession?, error:NSError?) -> Void))
+    {
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0))
+        {
+            // dispatch group to wait for stuff
+            let dispatchGroup = dispatch_group_create()
+            
+            var sessionToReturn:SPTSession? = nil
+            
+            // Refresh the spotify token if necessary
+            let userDefaults = NSUserDefaults.standardUserDefaults()
+            
+            // can force unwrap because user never gets to this screen without a session
+            let sessionDataObject:NSData = userDefaults.objectForKey("SpotifySession")! as! NSData
+            
+            // get the actual session
+            let oldSession = NSKeyedUnarchiver.unarchiveObjectWithData(sessionDataObject) as! SPTSession
+            
+            // update the session if it's no longer valid
+            if !oldSession.isValid()
+            {
+                // allow the the function to wait for the closure
+                dispatch_group_enter(dispatchGroup)
+                // session is not valid... update it
+                SPTAuth.defaultInstance().renewSession(oldSession, callback: {(error:NSError!, newSession:SPTSession!) -> Void in
+                    
+                    // no error. update the session
+                    if error == nil
+                    {
+                        // save the session
+                        let sessionData = NSKeyedArchiver.archivedDataWithRootObject(newSession)
+                        userDefaults.setObject(sessionData, forKey: "SpotifySession")
+                        userDefaults.synchronize()
+                        
+                        // update my session
+                        print("SESSION UPDATED SUCCESSFULLY!")
+                        sessionToReturn = newSession
+                        completion(returnedSession: sessionToReturn, error: nil)
+                    }
+                    else
+                    {
+                        print("ERROR IN SESSION RENEWAL: \(error.localizedDescription)")
+                        completion(returnedSession: nil, error: error)
+                    }
+                    
+                    // let wait stop waiting
+                    dispatch_group_leave(dispatchGroup)
+                })
+                // wait for closure to finish
+                dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
+            }
+            else // old session is still valid. Return and use it
+            {
+                print("SESSION IS STILL VALID!")
+                sessionToReturn = oldSession
+                completion(returnedSession: sessionToReturn, error: nil)
+            }
+        }
+    }
     
 }

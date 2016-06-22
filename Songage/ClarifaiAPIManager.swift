@@ -108,7 +108,6 @@ class ClarifaiAPIManager
                         
                         let json = JSON(response.result.value!)
                         
-                        print("JSON: \(json)")
                         let tagsForImage = json["results"][0]["result"]["tag"]["classes"]
                         
                         // append all the values of the tags to the array

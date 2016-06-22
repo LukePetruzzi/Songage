@@ -12,12 +12,6 @@ class SpotifyLoginViewController: UIViewController {
 
     @IBOutlet weak var loginButton: UIButton!
     
-    
-    let kClientID = "2bb2c1d0c40c47e4940855b6b1f56112"
-    let kCallbackURL = "songage://returnAfterLogin"
-    let kTokenSwapURL = "http://localhost:1234/swap"
-    let kTokenRefreshServiceURL = "http://localhost:1234/refresh"
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -33,12 +27,6 @@ class SpotifyLoginViewController: UIViewController {
     {
         // create an auth instance
         let auth = SPTAuth.defaultInstance()
-        
-        // set all parameters for the login url
-        auth.clientID = kClientID
-        auth.redirectURL = NSURL(string: kCallbackURL)
-        auth.tokenSwapURL = NSURL(string: kTokenSwapURL)
-        auth.tokenRefreshURL = NSURL(string: kTokenRefreshServiceURL)
         
         // get the login URL
         let loginURL = auth.loginURL
