@@ -16,10 +16,6 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var createSongageButton: UIButton!
 
-    
-    // keep a session object that I update
-    var spotifySession:SPTSession!
-    
     // create an image picker to use when add photo button is tapped
     let imagePicker = UIImagePickerController()
     
@@ -48,16 +44,12 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     override func viewWillAppear(animated: Bool)
     {
         // update the session if needed
-        SpotifyAPIManager.sharedInstance.updateSessionIfNeeded({(returnedSession, error) in
+        SpotifyAPIManager.sharedInstance.updateSessionIfNeeded({(error) in
             
             // update the session if no errors
-            if returnedSession != nil
+            if error != nil
             {
-                self.spotifySession = returnedSession
-            }
-            else
-            {
-                let alert = UIAlertController(title: "Error", message: "Error updating Spotify session: \(error!.localizedDescription)", preferredStyle: .Alert)
+                let alert = UIAlertController(title: "Error", message: "Error updating Spotify session:\n\(error!.localizedDescription)", preferredStyle: .Alert)
                 let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
                 alert.addAction(okAction)
                 

@@ -69,6 +69,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     else // no error!
                     {
+                        // VERY IMPORTANT: CREATE THE SESSION FOR THE FIRST TIME
+                        SPTAuth.defaultInstance().session = session
+                        
                         // create user defaults stuff so I can access the session forever and ever
                         let userDefaults = NSUserDefaults.standardUserDefaults()
                         let sessionData = NSKeyedArchiver.archivedDataWithRootObject(session)

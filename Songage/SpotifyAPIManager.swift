@@ -29,6 +29,7 @@ class SpotifyAPIManager
     let kTokenSwapURL = "http://localhost:1234/swap"
     let kTokenRefreshServiceURL = "http://localhost:1234/refresh"
     
+    // initialize the manager with everything it needs to be used
     func initializeSpotifyManager()
     {
         let auth = SPTAuth.defaultInstance()
@@ -41,18 +42,30 @@ class SpotifyAPIManager
         
         // set the scopes for login... SUPER IMPORTANT THAT I SET ALL THE SCOPES I WANT TO USE
         auth.requestedScopes = [SPTAuthStreamingScope]
+        
+        // Set the spotify session if necessary
+        if let sessionObject:AnyObject = NSUserDefaults.standardUserDefaults().objectForKey("SpotifySession")
+        {
+            // cast to data object
+            let sessionDataObject = sessionObject as! NSData
+            
+            // get the actual session
+            let savedSession = NSKeyedUnarchiver.unarchiveObjectWithData(sessionDataObject) as! SPTSession
+            
+            auth.session = savedSession
+        }
+        
+        
     }
     
     
     // return the session or nil if there was an error when updating
-    func updateSessionIfNeeded(completion:((returnedSession:SPTSession?, error:NSError?) -> Void))
+    func updateSessionIfNeeded(completion:((error:NSError?) -> Void))
     {
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0))
         {
             // dispatch group to wait for stuff
             let dispatchGroup = dispatch_group_create()
-            
-            var sessionToReturn:SPTSession? = nil
             
             // Refresh the spotify token if necessary
             let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -81,13 +94,15 @@ class SpotifyAPIManager
                         
                         // update my session
                         print("SESSION UPDATED SUCCESSFULLY!")
-                        sessionToReturn = newSession
-                        completion(returnedSession: sessionToReturn, error: nil)
+                        SPTAuth.defaultInstance().session = newSession
+                        
+                        completion(error: nil)
                     }
                     else
                     {
                         print("ERROR IN SESSION RENEWAL: \(error.localizedDescription)")
-                        completion(returnedSession: nil, error: error)
+                        // session not renewed
+                        completion(error: error)
                     }
                     
                     // let wait stop waiting
@@ -99,8 +114,8 @@ class SpotifyAPIManager
             else // old session is still valid. Return and use it
             {
                 print("SESSION IS STILL VALID!")
-                sessionToReturn = oldSession
-                completion(returnedSession: sessionToReturn, error: nil)
+                SPTAuth.defaultInstance().session = oldSession
+                completion(error: nil)
             }
         }
     }
