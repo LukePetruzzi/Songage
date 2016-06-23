@@ -34,6 +34,9 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     {
         super.viewDidLoad()
         
+        // make it so the image goes in real good
+        imageView.contentMode = .ScaleAspectFit
+        
         // set the delegate of the imagePicker
         imagePicker.delegate = self
         

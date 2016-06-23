@@ -25,6 +25,8 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         // set up the tableView
         self.setupTableView()
         
+        // make it so the image goes in real good
+        analyzedPhotoImageView.contentMode = .ScaleAspectFit
         // put the photo in the imageView
         analyzedPhotoImageView.image = SongsList.sharedInstance.getCurrentImage()
         tracks = SongsList.sharedInstance.getSongsList()
