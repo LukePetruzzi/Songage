@@ -18,6 +18,10 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBl-kt-YuE">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Songs for Your Image" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pog-zc-Hce">
                     <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                     <constraints>
@@ -53,10 +57,6 @@
                         </mask>
                     </variation>
                 </imageView>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBl-kt-YuE">
-                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TM1-mw-HeA">
                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                     <constraints>
@@ -94,9 +94,9 @@
             </constraints>
             <variation key="default">
                 <mask key="subviews">
+                    <exclude reference="LBl-kt-YuE"/>
                     <exclude reference="Pog-zc-Hce"/>
                     <exclude reference="tc0-68-9Y0"/>
-                    <exclude reference="LBl-kt-YuE"/>
                     <exclude reference="TM1-mw-HeA"/>
                 </mask>
                 <mask key="constraints">
@@ -115,9 +115,9 @@
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
                 <mask key="subviews">
+                    <include reference="LBl-kt-YuE"/>
                     <include reference="Pog-zc-Hce"/>
                     <include reference="tc0-68-9Y0"/>
-                    <include reference="LBl-kt-YuE"/>
                     <include reference="TM1-mw-HeA"/>
                 </mask>
                 <mask key="constraints">

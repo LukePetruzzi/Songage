@@ -24,18 +24,20 @@ class SongsList
         return Static.instance!
     }
     
-    // list of songs for the current list
-    private var currentTracksList:[SPTTrack]?
-    
     // image that the user is currently sending
-    private var currentImage:UIImage?
+    private var currentImage:UIImage = UIImage(named: "defaultImage")!
+    // list of songs for the current list
+    private var currentTracksList:[SPTTrack] = []
+    // save the pics for the albums
+    private var currentTracksAlbumsCoversList:[UIImage] = []
+
     
-    func setSongsList(newSongsList:[SPTTrack]?)
+    func setSongsList(newSongsList:[SPTTrack])
     {
         self.currentTracksList = newSongsList
     }
     
-    func getSongsList() -> [SPTTrack]?
+    func getSongsList() -> [SPTTrack]
     {
         return self.currentTracksList
     }
@@ -45,10 +47,20 @@ class SongsList
         self.currentImage = newImage
     }
     
-    func getCurrentImage() -> UIImage?
+    func getCurrentImage() -> UIImage
     
     {
         return self.currentImage
+    }
+    
+    func setAlbumCovers(covers:[UIImage])
+    {
+        self.currentTracksAlbumsCoversList = covers
+    }
+    
+    func getAlbumCovers() -> [UIImage]
+    {
+        return self.currentTracksAlbumsCoversList
     }
     
 }

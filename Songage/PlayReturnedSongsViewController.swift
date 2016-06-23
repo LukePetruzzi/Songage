@@ -16,6 +16,8 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
     // the tracks 
     // get all the tracks for this list of songIDs
     var tracks:[SPTTrack]?
+    // get all the album covers
+    var albumCovers:[UIImage] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +28,8 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         // put the photo in the imageView
         analyzedPhotoImageView.image = SongsList.sharedInstance.getCurrentImage()
         tracks = SongsList.sharedInstance.getSongsList()
+        albumCovers = SongsList.sharedInstance.getAlbumCovers()
+        print("THIS IS THE AMOUNT OF ALBUM COVERS: \(albumCovers.count)")
 
     }
     
@@ -69,7 +73,7 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return (SongsList.sharedInstance.getSongsList()?.count)!
+        return SongsList.sharedInstance.getSongsList().count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
@@ -84,6 +88,7 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
             cell.songTitleLabel.text = currentTrack.name
             cell.artistLabel.text = currentTrack.artists[0] as? String
             cell.albumNameLabel.text = currentTrack.album.name
+            cell.albumImageView.image = albumCovers[indexPath.row]
             
             
         }

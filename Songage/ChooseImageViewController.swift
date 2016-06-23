@@ -248,16 +248,42 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
                 // show the alert to the calling viewController
                 self.presentViewController(alert, animated: true, completion: nil)
             }
-            else // no error
+            else // no error. Tracks returned
             {
-                // save the tracks
-                SongsList.sharedInstance.setSongsList(returnedTracks)
-                
-                // save the imageView
-                SongsList.sharedInstance.setCurrentImage(self.imageView.image!)
-                
-                // present the next view controller
-                self.presentViewController(PlayReturnedSongsViewController(), animated: true, completion: nil)
+                dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0))
+                {
+                    // save the tracks
+                    SongsList.sharedInstance.setSongsList(returnedTracks!)
+                    // save the imageView
+                    SongsList.sharedInstance.setCurrentImage(self.imageView.image!)
+                    //save the album covers
+                    var albumCovers:[UIImage] = []
+                    for track in returnedTracks! // get album cover for every track
+                    {
+                        
+                        // dispatch group to wait for stuff
+                        let dispatchGroup = dispatch_group_create()
+                        
+                        // start waiting
+                        dispatch_group_enter(dispatchGroup)
+                        
+                        self.requestImage(track.album.largestCover.imageURL, completion: {(image) in
+                            
+                            // add album cover to the images
+                            albumCovers.append(image!)
+                            
+                            // let wait stop waiting
+                            dispatch_group_leave(dispatchGroup)
+                        })
+                        
+                        // wait for the thing to finish
+                        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
+                    }
+                    SongsList.sharedInstance.setAlbumCovers(albumCovers)
+                    
+                    // present the next view controller
+                    self.presentViewController(PlayReturnedSongsViewController(), animated: true, completion: nil)
+                }
             }
         })
     }
