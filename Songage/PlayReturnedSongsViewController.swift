@@ -98,6 +98,39 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         return cell
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    {
+        // if user has been away, the session may be old
+        SpotifyAPIManager.sharedInstance.updateSessionIfNeeded({(error) in
+            
+            // update the session if no errors
+            if error != nil
+            {
+                let alert = UIAlertController(title: "Error", message: "Error updating Spotify session:\n\(error!.localizedDescription)", preferredStyle: .Alert)
+                let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+                alert.addAction(okAction)
+                
+                // show the alert to the calling viewController
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
+        })
+        
+        print("TRACK SELECTED: \(tracks![indexPath.row].name)")
+//        
+//        SpotifyAPIManager.sharedInstance.playTrack(self.tracks![indexPath.row], completion: {(error) -> Void in
+//        
+//            if error != nil
+//            {
+//                let alert = UIAlertController(title: "Error", message: "Error playing Spotify track:\n\(error!.localizedDescription)", preferredStyle: .Alert)
+//                let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+//                alert.addAction(okAction)
+//                
+//                // show the alert to the calling viewController
+//                self.presentViewController(alert, animated: true, completion: nil)
+//            }
+//        })
+    }
+    
     @IBAction func newSongageButtonTapped(sender: UIButton)
     {
         self.dismissViewControllerAnimated(true, completion: nil)

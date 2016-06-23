@@ -287,6 +287,14 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
                     }
                     SongsList.sharedInstance.setAlbumCovers(albumCovers)
                     
+                    // set up the tracks on the player
+                    SpotifyAPIManager.sharedInstance.setupPlayerWithQueueOfSongs(returnedTracks!, completion: {(error) -> Void in
+                    
+                        if error != nil{
+                            
+                        }
+                    })
+                    
                     // present the next view controller
                     self.presentViewController(PlayReturnedSongsViewController(), animated: true, completion: nil)
                 }

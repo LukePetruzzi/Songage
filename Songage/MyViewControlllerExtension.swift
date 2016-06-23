@@ -44,4 +44,14 @@ extension UIViewController
         }
     }
     
+    func showAlertWithError(error:NSError, stringBeforeMessage:String?)
+    {
+        let alert = UIAlertController(title: "Error", message: "\(stringBeforeMessage)\(error.localizedDescription)", preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+        alert.addAction(okAction)
+        
+        // show the alert to the calling viewController
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
 }
