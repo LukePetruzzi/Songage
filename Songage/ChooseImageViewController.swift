@@ -255,11 +255,13 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             }
             else // no error. Tracks returned
             {
-                let semaphore = dispatch_semaphore_create(0)
-                
+                // save the imageView
+                SongsList.sharedInstance.setCurrentImage(self.imageView.image!)
                 // save the tracks
                 SongsList.sharedInstance.setSongsList(returnedTracks!)
+
                 
+
                 
                 // set up the tracks on the player
                 SpotifyAPIManager.sharedInstance.setupPlayerWithQueueOfSongs(returnedTracks!, completion: {(error) -> Void in
@@ -267,48 +269,27 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
                     if error != nil {
                         self.showAlertWithError(error!, stringBeforeMessage: "Error putting Spotify tracks in a playable queue: ")
                     }
-                    
-                    dispatch_semaphore_signal(semaphore) // let wait know it's done
-                })
-                
-                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-                
-                
-                dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0))
-                {
-                    // dispatch group to wait for stuff
-                    let dispatchGroup = dispatch_group_create()
-                    
-                    
-                    // save the imageView
-                    SongsList.sharedInstance.setCurrentImage(self.imageView.image!)
-                    //save the album covers
-                    var albumCovers:[UIImage] = []
-                    for track in returnedTracks! // get album cover for every track
-                    {
+                    else{
+                        //save the album covers
+                        var albumCovers:[UIImage] = []
+                        var albumObtainedCount = 0
+                        for track in returnedTracks! // get album cover for every track
+                        {
+                            self.requestImage(track.album.largestCover.imageURL, completion: {(image) in
+                                // add album cover to the images
+                                albumCovers.append(image!)
+                                albumObtainedCount++
+                                if (albumObtainedCount == returnedTracks?.count)   {
+                                    // set the covers to what was returned
+                                    SongsList.sharedInstance.setAlbumCovers(albumCovers)
+                                    // present the next view controller
+                                    self.presentViewController(PlayReturnedSongsViewController(), animated: true, completion: nil)
+                                }
+                            })
+                        }
                         
-                        // start waiting
-                        dispatch_group_enter(dispatchGroup)
-                        
-                        self.requestImage(track.album.largestCover.imageURL, completion: {(image) in
-                            
-                            // add album cover to the images
-                            albumCovers.append(image!)
-                            
-                            // let wait stop waiting
-                            dispatch_group_leave(dispatchGroup)
-                        })
-                        
-                        // wait for the thing to finish
-                        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
                     }
-                    
-                    // set the covers to what was returned
-                    SongsList.sharedInstance.setAlbumCovers(albumCovers)
-                    
-                    // present the next view controller
-                    self.presentViewController(PlayReturnedSongsViewController(), animated: true, completion: nil)
-                }
+                })
             }
         })
     }
