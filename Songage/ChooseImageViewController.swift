@@ -232,11 +232,13 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     
     func getReturnedSongsFromSpotify()
     {
-        print("SONG IDs FOR THIS IMAGE IN THE SPOTIFY CALLER: \(songsIDsForThisImage)")
         
+        print("SONG IDs FOR THIS IMAGE IN THE SPOTIFY CALLER: \(songsIDsForThisImage)")
         
         // get the tracks
         SpotifyAPIManager.sharedInstance.getSpotifyTracks(songsIDsForThisImage, completion: {(returnedTracks:[SPTTrack]?, error:NSError?) in
+            // reset the calls made, cuz I don't need them anymore. SUPER MEGA IMPORTANT TO DO THIS WHEN FOR EACH SONGAGE MADE
+            self.resetMusixCalls()
             
             // update the session if no errors
             if error != nil
@@ -254,6 +256,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
                 {
                     // save the tracks
                     SongsList.sharedInstance.setSongsList(returnedTracks!)
+                    
                     // save the imageView
                     SongsList.sharedInstance.setCurrentImage(self.imageView.image!)
                     //save the album covers

@@ -29,8 +29,8 @@ class SpotifyAPIManager
     // Spotify constants
     let kClientID = "2bb2c1d0c40c47e4940855b6b1f56112"
     let kCallbackURL = "songage://returnAfterLogin"
-    let kTokenSwapURL = "http://localhost:1234/swap"
-    let kTokenRefreshServiceURL = "http://localhost:1234/refresh"
+    let kTokenSwapURL = "https://arcane-shelf-78119.herokuapp.com/swap"
+    let kTokenRefreshServiceURL = "https://arcane-shelf-78119.herokuapp.com/refresh"
     
     // initialize the manager with everything it needs to be used
     func initializeSpotifyManager()
@@ -86,12 +86,16 @@ class SpotifyAPIManager
                 completion(returnedTracks: nil, error: error)
                 return
             }
-            else // no errors
+            else if trackObject != nil// no errors
             {
                 // get the tracks and return them
                 let tracksToReturn:[SPTTrack] = trackObject as! [SPTTrack]
                 
                 completion(returnedTracks: tracksToReturn, error: nil)
+            }
+            else // the tracks didnt return for some reason
+            {
+                completion(returnedTracks: nil, error: NSError(domain: "These numbers spell \"Boobs\":", code: 80085, userInfo: nil))
             }
         })
     }
