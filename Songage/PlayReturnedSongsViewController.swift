@@ -44,12 +44,7 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
             // update the session if no errors
             if error != nil
             {
-                let alert = UIAlertController(title: "Error", message: "Error updating Spotify session:\n\(error!.localizedDescription)", preferredStyle: .Alert)
-                let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
-                alert.addAction(okAction)
-                
-                // show the alert to the calling viewController
-                self.presentViewController(alert, animated: true, completion: nil)
+                self.showAlertWithError(error!, stringBeforeMessage: "Error updating spotify session:")
             }
         })
     }
@@ -91,8 +86,6 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
             cell.artistLabel.text = currentTrack.artists[0] as? String
             cell.albumNameLabel.text = currentTrack.album.name
             cell.albumImageView.image = albumCovers[indexPath.row]
-            
-            
         }
         
         return cell
@@ -104,31 +97,21 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         SpotifyAPIManager.sharedInstance.updateSessionIfNeeded({(error) in
             
             // update the session if no errors
-            if error != nil
-            {
-                let alert = UIAlertController(title: "Error", message: "Error updating Spotify session:\n\(error!.localizedDescription)", preferredStyle: .Alert)
-                let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
-                alert.addAction(okAction)
-                
-                // show the alert to the calling viewController
-                self.presentViewController(alert, animated: true, completion: nil)
+            if error != nil{
+                // show the error if there is one
+                self.showAlertWithError(error!, stringBeforeMessage: "Error updating spotify session: ")
             }
         })
         
         print("TRACK SELECTED: \(tracks![indexPath.row].name)")
-//        
-//        SpotifyAPIManager.sharedInstance.playTrack(self.tracks![indexPath.row], completion: {(error) -> Void in
-//        
-//            if error != nil
-//            {
-//                let alert = UIAlertController(title: "Error", message: "Error playing Spotify track:\n\(error!.localizedDescription)", preferredStyle: .Alert)
-//                let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
-//                alert.addAction(okAction)
-//                
-//                // show the alert to the calling viewController
-//                self.presentViewController(alert, animated: true, completion: nil)
-//            }
-//        })
+
+        // play the track at the index
+        SpotifyAPIManager.sharedInstance.playTrackWithSentIndex(Int32(indexPath.row), completion: {(error) in
+            
+            if error != nil{
+                self.showAlertWithError(error!, stringBeforeMessage: "Error playing song:")
+            }
+        })
     }
     
     @IBAction func newSongageButtonTapped(sender: UIButton)
@@ -136,5 +119,15 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    
+    override func viewDidDisappear(animated: Bool)
+    {
+        // refresh the player for the next go around
+        SpotifyAPIManager.sharedInstance.renewPlayer({(error) in
+            if error != nil{
+                self.showAlertWithError(error!, stringBeforeMessage: "Error refreshing the player:")
+            }
+        })
+    }
     
 }

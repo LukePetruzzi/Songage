@@ -46,7 +46,7 @@ extension UIViewController
     
     func showAlertWithError(error:NSError, stringBeforeMessage:String?)
     {
-        let alert = UIAlertController(title: "Error", message: "\(stringBeforeMessage)\(error.localizedDescription)", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Error", message: "\(stringBeforeMessage)\n\(error.localizedDescription)", preferredStyle: .Alert)
         let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
         alert.addAction(okAction)
         

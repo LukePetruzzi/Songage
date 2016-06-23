@@ -63,8 +63,58 @@ class SpotifyAPIManager
     
     func setupPlayerWithQueueOfSongs(tracksToQueue:[SPTTrack], completion:((error:NSError?) -> Void))
     {
-        print("TRACKS RECEIVED. FIRST ONE: \(tracksToQueue[0].name)")
-        
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0))
+        {
+            print("TRACKS RECEIVED. FIRST ONE: \(tracksToQueue[0].name)")
+            
+            // if the player hasn't been initialized... do so
+            if self.player == nil {
+                print("PLAYER INITIALIZED")
+                
+                self.player = SPTAudioStreamingController(clientId: SPTAuth.defaultInstance().clientID)
+            }
+            
+            self.player?.loginWithSession(SPTAuth.defaultInstance().session, callback: {(error:NSError!) -> Void in
+                
+                if error != nil
+                {
+                    completion(error: error)
+                }
+                else // no error. play the tracks
+                {
+                    var trackURIs:[NSURL] = []
+                    // get the uris for all the tracks
+                    for track in tracksToQueue {
+                        trackURIs.append(track.uri)
+                    }
+                    
+                    // dispatch group to wait for stuff
+                    let dispatchGroup = dispatch_group_create()
+                    // enter the group
+                    dispatch_group_enter(dispatchGroup)
+                    
+                    self.player?.replaceURIs(trackURIs, withCurrentTrack: 0, callback: {(error:NSError!) -> Void in
+                        
+                        if error != nil{
+                            completion(error: error)
+                            return
+                        }
+                        
+                        print("SHOULD HAVE SET UP THE TRACKS")
+                        // let the group know it's done waiting
+                        dispatch_group_leave(dispatchGroup)
+                    })
+                    // wait fot he closure
+                    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
+                }
+                
+            })
+        }
+    }
+    
+    // refresh the player by deleting its songs in its indices.
+    func renewPlayer(completion:((error:NSError?) -> Void))
+    {
         // if the player hasn't been initialized... do so
         if player == nil {
             print("PLAYER INITIALIZED")
@@ -72,65 +122,29 @@ class SpotifyAPIManager
             player = SPTAudioStreamingController(clientId: SPTAuth.defaultInstance().clientID)
         }
         
-        player?.loginWithSession(SPTAuth.defaultInstance().session, callback: {(error:NSError!) -> Void in
+        player?.stop({(error) in
+            
+            if error != nil {
+                completion(error: error)
+                return
+            }
+            print("PLAYER REFRESHED")
+        })
+    }
+    
+    func playTrackWithSentIndex(indexOfTrack:Int32, completion:((error:NSError?) -> Void))
+    {
+        player?.playURIsFromIndex(indexOfTrack, callback: {(error) in
             
             if error != nil
             {
                 completion(error: error)
             }
-            else // no error. play the tracks
-            {
-                var trackURIs:[NSURL] = []
-                // get the uris for all the tracks
-                for track in tracksToQueue {
-                    trackURIs.append(track.uri)
-                }
-                
-                dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0))
-                {
-                    // dispatch group to wait for stuff
-                    let dispatchGroup = dispatch_group_create()
-                    
-                    // enter the group
-                    dispatch_group_enter(dispatchGroup)
-                    
-                    print("SHOULD HAVE SET UP THE TRACKS")
-                    
-                    self.player?.replaceURIs(trackURIs, withCurrentTrack: 0, callback: {(error:NSError!) -> Void in
-                        
-                        if error != nil{
-                            completion(error: error)
-                        }
-                        
-                        // let the group know it's done waiting
-                        dispatch_group_leave(dispatchGroup)
-                    })
-                    // wait fot he closure
-                    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
-                }
+            else{
+                print("SONG SHOULD BE PLAYING!!!")
             }
         })
     }
-    
-    //    func playTrack(trackToPlay:SPTTrack, completion:((error:NSError?) -> Void))
-    //    {
-    //
-    //
-    //        player?.loginWithSession(SPTAuth.defaultInstance().session, callback: {(error:NSError!) -> Void in
-    //
-    //            if error != nil
-    //            {
-    //                completion(error: error)
-    //            }
-    //            else // no error. play the tracks
-    //            {
-    //                print("SHOULD BE PLAYING TRACK NOW")
-    //
-    //                self.player!.stop(nil)
-    //                self.player?.playTrackProvider(trackToPlay, callback: nil)
-    //            }
-    //        })
-    //    }
     
     func getSpotifyTracks(spotifyTrackIDs:[String], completion: (returnedTracks:[SPTTrack]?, error:NSError?) -> Void)
     {

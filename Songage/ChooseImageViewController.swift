@@ -255,10 +255,30 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             }
             else // no error. Tracks returned
             {
+                let semaphore = dispatch_semaphore_create(0)
+                
+                // save the tracks
+                SongsList.sharedInstance.setSongsList(returnedTracks!)
+                
+                
+                // set up the tracks on the player
+                SpotifyAPIManager.sharedInstance.setupPlayerWithQueueOfSongs(returnedTracks!, completion: {(error) -> Void in
+                    
+                    if error != nil {
+                        self.showAlertWithError(error!, stringBeforeMessage: "Error putting Spotify tracks in a playable queue: ")
+                    }
+                    
+                    dispatch_semaphore_signal(semaphore) // let wait know it's done
+                })
+                
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+                
+                
                 dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0))
                 {
-                    // save the tracks
-                    SongsList.sharedInstance.setSongsList(returnedTracks!)
+                    // dispatch group to wait for stuff
+                    let dispatchGroup = dispatch_group_create()
+                    
                     
                     // save the imageView
                     SongsList.sharedInstance.setCurrentImage(self.imageView.image!)
@@ -266,9 +286,6 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
                     var albumCovers:[UIImage] = []
                     for track in returnedTracks! // get album cover for every track
                     {
-                        
-                        // dispatch group to wait for stuff
-                        let dispatchGroup = dispatch_group_create()
                         
                         // start waiting
                         dispatch_group_enter(dispatchGroup)
@@ -285,15 +302,9 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
                         // wait for the thing to finish
                         dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
                     }
+                    
+                    // set the covers to what was returned
                     SongsList.sharedInstance.setAlbumCovers(albumCovers)
-                    
-                    // set up the tracks on the player
-                    SpotifyAPIManager.sharedInstance.setupPlayerWithQueueOfSongs(returnedTracks!, completion: {(error) -> Void in
-                    
-                        if error != nil{
-                            
-                        }
-                    })
                     
                     // present the next view controller
                     self.presentViewController(PlayReturnedSongsViewController(), animated: true, completion: nil)
