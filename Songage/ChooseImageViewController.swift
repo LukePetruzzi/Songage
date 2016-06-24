@@ -146,10 +146,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             ClarifaiAPIManager.sharedInstance.getTagsForImage(jpeg, presentingViewController: self, completion: getTagsComplete)
         }
         else // no image loaded yet
-        {   // test
-            //            let url = NSURL(string: "https://google.com")!
-            //            UIApplication.sharedApplication().openURL(url)
-            
+        {
             // create and show an alert that the user has no image selected
             let alert = UIAlertController(title: "No Image", message: "To create a Songage, supply an image!", preferredStyle: .ActionSheet)
             let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
@@ -191,7 +188,6 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             self.presentViewController(alert, animated: true, completion: nil)
         }
         
-        
         // reenable the button to create a songage
         createSongageButton.enabled = true
     }
@@ -204,9 +200,17 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             
             if returnedSongs!.count > 0
             {
-                // add the first and most popular song to the songsForThisImage
-                songsIDsForThisImage.append(returnedSongs![0].trackID)
+                for song in returnedSongs!
+                {
+                    songsIDsForThisImage.append(song.trackID)
+                }
             }
+            
+            //            if returnedSongs!.count > 0
+            //            {
+            //                // add the first and most popular song to the songsForThisImage
+            //                songsIDsForThisImage.append(returnedSongs![0].trackID)
+            //            }
             
             // increment the musix calls
             musixCallsMadeSoFar += 1
@@ -259,9 +263,9 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
                 SongsList.sharedInstance.setCurrentImage(self.imageView.image!)
                 // save the tracks
                 SongsList.sharedInstance.setSongsList(returnedTracks!)
-
                 
-
+                
+                
                 
                 // set up the tracks on the player
                 SpotifyAPIManager.sharedInstance.setupPlayerWithQueueOfSongs(returnedTracks!, completion: {(error) -> Void in
@@ -273,19 +277,35 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
                         //save the album covers
                         var albumCovers:[UIImage] = []
                         var albumObtainedCount = 0
-                        for track in returnedTracks! // get album cover for every track
+                        
+                        // load the albums once at a time
+                        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0))
                         {
-                            self.requestImage(track.album.largestCover.imageURL, completion: {(image) in
-                                // add album cover to the images
-                                albumCovers.append(image!)
-                                albumObtainedCount++
-                                if (albumObtainedCount == returnedTracks?.count)   {
-                                    // set the covers to what was returned
-                                    SongsList.sharedInstance.setAlbumCovers(albumCovers)
-                                    // present the next view controller
-                                    self.presentViewController(PlayReturnedSongsViewController(), animated: true, completion: nil)
-                                }
-                            })
+                            
+                            let dispatchGroup = dispatch_group_create()
+                            for track in returnedTracks! // get album cover for every track
+                            {
+                                // enter the group
+                                dispatch_group_enter(dispatchGroup)
+                                
+                                self.requestImage(track.album.largestCover.imageURL, completion: {(image) in
+                                    
+                                    // add album cover to the images
+                                    albumCovers.append(image!)
+                                    albumObtainedCount += 1
+                                    
+                                    if (albumObtainedCount == returnedTracks?.count)   {
+                                        // set the covers to what was returned
+                                        SongsList.sharedInstance.setAlbumCovers(albumCovers)
+                                        // present the next view controller
+                                        self.presentViewController(PlayReturnedSongsViewController(), animated: true, completion: nil)
+                                    }
+                                    
+                                    dispatch_group_leave(dispatchGroup)
+                                })
+                                
+                                dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
+                            }
                         }
                         
                     }

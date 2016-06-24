@@ -24,7 +24,7 @@ class SpotifyAPIManager
     }
     
     // Audio player for spotify stuff
-    private var player:SPTAudioStreamingController?
+    var player:SPTAudioStreamingController?
     
     // Spotify constants
     let kClientID = "2bb2c1d0c40c47e4940855b6b1f56112"
@@ -73,34 +73,61 @@ class SpotifyAPIManager
             self.player = SPTAudioStreamingController(clientId: SPTAuth.defaultInstance().clientID)
         }
         
-        self.player?.loginWithSession(SPTAuth.defaultInstance().session, callback: {(error:NSError!) -> Void in
-            
-            if error != nil
-            {
-                completion(error: error)
-            }
-            else // no error. play the tracks
-            {
-                var trackURIs:[NSURL] = []
-                // get the uris for all the tracks
-                for track in tracksToQueue {
-                    trackURIs.append(track.uri)
+        print("PLAYER HAS THIS MANY TRACKS IN IT (SHOULD BE ZERO): \(self.player?.accessibilityElementCount())")
+        
+        
+        if !(player?.loggedIn)!
+        {
+            self.player?.loginWithSession(SPTAuth.defaultInstance().session, callback: {(error:NSError!) -> Void in
+                
+                if error != nil
+                {
+                    completion(error: error)
                 }
-
-                // get the uris into the player and ready to play
-                self.player?.replaceURIs(trackURIs, withCurrentTrack: 0, callback: {(error:NSError!) -> Void in
+                else // no error. play the tracks
+                {
+                    var trackURIs:[NSURL] = []
+                    // get the uris for all the tracks
+                    for track in tracksToQueue {
+                        trackURIs.append(track.uri)
+                    }
                     
-                    if error != nil{
-                        completion(error: error)
-                    }
-                    else
-                    {
-                        print("SHOULD HAVE SET UP THE TRACKS")
-                        completion(error: nil)
-                    }
-                })
+                    // get the uris into the player and ready to play
+                    self.player?.replaceURIs(trackURIs, withCurrentTrack: 0, callback: {(error:NSError!) -> Void in
+                        
+                        if error != nil{
+                            completion(error: error)
+                        }
+                        else
+                        {
+                            print("SHOULD HAVE SET UP THE TRACKS")
+                            completion(error: nil)
+                        }
+                    })
+                }
+            })
+        }
+        else// session already logged in. just get the tracks
+        {
+            var trackURIs:[NSURL] = []
+            // get the uris for all the tracks
+            for track in tracksToQueue {
+                trackURIs.append(track.uri)
             }
-        })
+            
+            // get the uris into the player and ready to play
+            self.player?.replaceURIs(trackURIs, withCurrentTrack: 0, callback: {(error:NSError!) -> Void in
+                
+                if error != nil{
+                    completion(error: error)
+                }
+                else
+                {
+                    print("SHOULD HAVE SET UP THE TRACKS")
+                    completion(error: nil)
+                }
+            })
+        }
     }
     
     // refresh the player by deleting its songs in its indices.

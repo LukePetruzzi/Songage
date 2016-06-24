@@ -45,7 +45,7 @@ class MusixmatchAPIManager
         // create the parameters for the request
         let parameters:[String : String] = [
             "q_lyrics": lyricsString,
-            "s_track_rating": "desc",
+            //"s_track_rating": "desc",
             "page_size": String(7),
             "apikey": self.apikey
         ]
@@ -57,11 +57,7 @@ class MusixmatchAPIManager
         
         // do things with the reponse
         request.responseJSON { response in
-            //            print("REQUEST: \(response.request!)")  // original URL request
-            //            print("RESPONSE: \(response.response!.statusCode)") // URL response
-            //            print("SERVER DATA: \(response.data!)")     // server data
-            //            print("RESULT: \(response.result)")   // result of response serialization
-            //
+            
             if response.result.isSuccess
             {
                 
@@ -73,21 +69,14 @@ class MusixmatchAPIManager
                 
                 var returnTracks:[(trackName:String, trackID:String)] = []
                 
-//                let TRACKS_TO_GET = 3
-//                var tracksGotten = 0
+
                 // parse through the json
                 for (_, jsonTrack) in trackList
                 {
-                    // only get so many tracks per query
-//                    if tracksGotten == TRACKS_TO_GET { break }
-                    
                     // return onl the songs that have a spotify identifier
                     if jsonTrack["track"]["track_spotify_id"].stringValue != ""
                     {
                         returnTracks += [(trackName: jsonTrack["track"]["track_name"].stringValue, trackID: jsonTrack["track"]["track_spotify_id"].stringValue)]
-                        
-                        // increment the track counter
-//                        tracksGotten += 1
                     }
                 }
                 

@@ -13,7 +13,7 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
     @IBOutlet weak var analyzedPhotoImageView: UIImageView!
     @IBOutlet weak var songsTableView: UITableView!
     
-    // the tracks 
+    // the tracks
     // get all the tracks for this list of songIDs
     var tracks:[SPTTrack]?
     // get all the album covers
@@ -32,7 +32,7 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         tracks = SongsList.sharedInstance.getSongsList()
         albumCovers = SongsList.sharedInstance.getAlbumCovers()
         print("THIS IS THE AMOUNT OF ALBUM COVERS: \(albumCovers.count)")
-
+        
     }
     
     override func viewWillAppear(animated: Bool)
@@ -95,7 +95,6 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
     {
         // if user has been away, the session may be old
         SpotifyAPIManager.sharedInstance.updateSessionIfNeeded({(error) in
-            
             // update the session if no errors
             if error != nil{
                 // show the error if there is one
@@ -103,22 +102,57 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
             }
         })
         
-        print("TRACK SELECTED: \(tracks![indexPath.row].name)")
+        let player = SpotifyAPIManager.sharedInstance.player!
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! SpotifyPlayerTableViewCell
 
-        // play the track at the index
-        SpotifyAPIManager.sharedInstance.playTrackWithSentIndex(Int32(indexPath.row), completion: {(error) in
+        
+        print("TRACK SELECTED: \(tracks![indexPath.row].name)")
+        
+        if indexPath.row == Int(player.currentTrackIndex) && player.isPlaying
+        {
+            // set the player to false
+            player.setIsPlaying(false, callback: {(error) in
+                if error != nil {
+                    self.showAlertWithError(error, stringBeforeMessage: "Error pausing the song: ")
+                }
+            })
+            // pausing the song now. It should say play is an option
+            cell.playButton.imageView?.image = UIImage(named: "playIcon")
+        }
+        else
+        {
+            // play the track at the index
+            SpotifyAPIManager.sharedInstance.playTrackWithSentIndex(Int32(indexPath.row), completion: {(error) in
+                if error != nil{
+                    self.showAlertWithError(error!, stringBeforeMessage: "Error playing song:")
+                }
+            })
             
-            if error != nil{
-                self.showAlertWithError(error!, stringBeforeMessage: "Error playing song:")
-            }
-        })
+            // playing the song now. It should say pause is an option
+            cell.playButton.imageView?.image = UIImage(named: "pauseIcon")
+        }
+        
     }
+    
+    // being called by my cell like a boss
+//    func cellWasSelected(cell: SpotifyPlayerTableViewCell)
+//    {
+//        let player = SpotifyAPIManager.sharedInstance.player!
+//        
+//        if !player.isPlaying
+//        {
+//            cell.playButton.imageView?.image = UIImage(named: "pauseIcon")
+//        }
+//        else // song not currently playing.
+//        {
+//            cell.playButton.imageView?.image = UIImage(named: "playIcon")
+//        }
+//    }
     
     @IBAction func newSongageButtonTapped(sender: UIButton)
     {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
     
     override func viewDidDisappear(animated: Bool)
     {

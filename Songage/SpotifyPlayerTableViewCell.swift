@@ -8,6 +8,11 @@
 
 import UIKit
 
+protocol SpotifyPlayerTableViewCellDelegate
+{
+    func cellWasSelected(cell:SpotifyPlayerTableViewCell)
+}
+
 class SpotifyPlayerTableViewCell: UITableViewCell
 {
     
@@ -17,6 +22,8 @@ class SpotifyPlayerTableViewCell: UITableViewCell
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var albumNameLabel: UILabel!
     
+    // optional delegate to implement protocol
+    var delegate:SpotifyPlayerTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -28,7 +35,5 @@ class SpotifyPlayerTableViewCell: UITableViewCell
 
         // Configure the view for the selected state
     }
-    
-    
-    
+
 }
