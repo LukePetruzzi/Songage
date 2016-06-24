@@ -117,7 +117,7 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
                 }
             })
             // pausing the song now. It should say play is an option
-            cell.playButton.imageView?.image = UIImage(named: "playIcon")
+            cell.playImageView.image = UIImage(named: "playIcon")
         }
         else
         {
@@ -129,7 +129,7 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
             })
             
             // playing the song now. It should say pause is an option
-            cell.playButton.imageView?.image = UIImage(named: "pauseIcon")
+            cell.playImageView.image = UIImage(named: "pauseIcon")
         }
         
     }

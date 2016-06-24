@@ -17,7 +17,7 @@ class SpotifyPlayerTableViewCell: UITableViewCell
 {
     
     @IBOutlet weak var albumImageView: UIImageView!
-    @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var playImageView: UIImageView!
     @IBOutlet weak var songTitleLabel: UILabel!
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var albumNameLabel: UILabel!
