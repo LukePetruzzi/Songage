@@ -299,6 +299,9 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
                                         SongsList.sharedInstance.setAlbumCovers(albumCovers)
                                         // present the next view controller
                                         self.presentViewController(PlayReturnedSongsViewController(), animated: true, completion: nil)
+                                        
+                                        // remove the loading overlay because done loading
+                                        self.removeLoadingOverlay()
                                     }
                                     
                                     dispatch_group_leave(dispatchGroup)

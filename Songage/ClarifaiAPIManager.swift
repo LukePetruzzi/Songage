@@ -49,8 +49,11 @@ class ClarifaiAPIManager
     
     
     // pass in a jpeg image, get back Clarifai's tags for the image
-    func getTagsForImage(jpeg:NSData, presentingViewController:UIViewController?, completion: (tags: [String]?, error: NSError?) -> Void)
+    func getTagsForImage(jpeg:NSData, presentingViewController:UIViewController, completion: (tags: [String]?, error: NSError?) -> Void)
     {
+        // add a loading overlay to view if one passed
+        presentingViewController.addLoadingOverlay()
+        
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             
             let dispatchGroup = dispatch_group_create()

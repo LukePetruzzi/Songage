@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+public let LOADING_OVERLAY_VIEW_TAG = 987432
+
 extension UIViewController
 {
     public func requestImage(imageUrl: NSURL, completion: (image:UIImage?) -> Void)
@@ -52,6 +54,46 @@ extension UIViewController
         
         // show the alert to the calling viewController
         self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    
+    // create a loading view overlay
+    func addLoadingOverlay()
+    {
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        // disable user interaction while loading
+        appDelegate.window?.userInteractionEnabled = false
+        
+        //add an overlay screen
+        let overlayImage = UIImageView(frame: self.view.frame)
+        overlayImage.backgroundColor = UIColor.blackColor()
+        overlayImage.alpha = 0.5
+        overlayImage.tag = LOADING_OVERLAY_VIEW_TAG
+        
+        let loadingSpinner = UIActivityIndicatorView(frame: overlayImage.frame)
+        loadingSpinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+        loadingSpinner.startAnimating()
+        overlayImage.addSubview(loadingSpinner)
+        
+        
+        return appDelegate.window!.addSubview(overlayImage)
+    }
+    
+    // drop the loading view
+    func removeLoadingOverlay()
+    {
+        
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        for view in appDelegate.window!.subviews  {
+            if (view.tag == LOADING_OVERLAY_VIEW_TAG)   {
+                view.removeFromSuperview()
+            }
+        }
+        
+        // reenable user interaction after loading
+        appDelegate.window?.userInteractionEnabled = true
     }
     
 }
