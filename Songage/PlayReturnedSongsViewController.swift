@@ -110,6 +110,9 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         
         if indexPath.row == Int(player.currentTrackIndex) && player.isPlaying
         {
+            // deselect the row
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            
             // set the player to false
             player.setIsPlaying(false, callback: {(error) in
                 if error != nil {
@@ -133,6 +136,7 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         }
         
     }
+    
     
     // being called by my cell like a boss
 //    func cellWasSelected(cell: SpotifyPlayerTableViewCell)
