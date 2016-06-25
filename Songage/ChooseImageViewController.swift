@@ -178,14 +178,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         }
         else
         {
-            print("ERROR IN TAGS COMPLETE: \(error!.localizedDescription)")
-            
-            let alert = UIAlertController(title: "Error", message: error!.localizedDescription, preferredStyle: .Alert)
-            let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
-            alert.addAction(okAction)
-            
-            // show the alert to the calling viewController
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.showAlertWithError(error!, stringBeforeMessage: "Error analyzing image:")
         }
         
         // reenable the button to create a songage
@@ -223,14 +216,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         }
         else // there was some error
         {
-            print("ERROR IN SearchForSongs COMPLETE: \(error!.localizedDescription)")
-            
-            let alert = UIAlertController(title: "Error", message: error!.localizedDescription, preferredStyle: .Alert)
-            let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
-            alert.addAction(okAction)
-            
-            // show the alert to the calling viewController
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.showAlertWithError(error!, stringBeforeMessage: "Error searching for songs with lyrics matching your image:")
             
             // reset the calls made so far cuz this thang done broke
             self.resetMusixCalls()
@@ -250,12 +236,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             // update the session if no errors
             if error != nil
             {
-                let alert = UIAlertController(title: "Error", message: "Error getting Spotify tracks:\n\(error!.localizedDescription)", preferredStyle: .Alert)
-                let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
-                alert.addAction(okAction)
-                
-                // show the alert to the calling viewController
-                self.presentViewController(alert, animated: true, completion: nil)
+                self.showAlertWithError(error!, stringBeforeMessage: "Error retreiving songs from Spotify:")
             }
             else // no error. Tracks returned
             {

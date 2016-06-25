@@ -29,7 +29,7 @@ extension UIViewController
                 
                 if error != nil
                 {
-                    print("Error getting image: \(error?.localizedDescription)")
+                    self.showAlertWithError(error!, stringBeforeMessage: "Error getting album image:")
                 }
                 else // no error. use the data
                 {
@@ -48,12 +48,21 @@ extension UIViewController
     
     func showAlertWithError(error:NSError, stringBeforeMessage:String?)
     {
-        let alert = UIAlertController(title: "Error", message: "\(stringBeforeMessage)\n\(error.localizedDescription)", preferredStyle: .Alert)
+        var preErrorString = stringBeforeMessage
+        
+        if stringBeforeMessage == nil{
+            preErrorString = ""
+        }
+        
+        let alert = UIAlertController(title: "Error", message: "\(preErrorString!)\n\(error.localizedDescription)", preferredStyle: .Alert)
         let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
         alert.addAction(okAction)
         
         // show the alert to the calling viewController
         self.presentViewController(alert, animated: true, completion: nil)
+        
+        // dismiss loading overlay because error
+        self.removeLoadingOverlay()
     }
     
     

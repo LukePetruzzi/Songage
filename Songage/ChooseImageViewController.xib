@@ -22,21 +22,38 @@
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="135" y="31" width="131" height="21"/>
-                    </variation>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultImage" translatesAutoresizingMaskIntoConstraints="NO" id="KLX-ok-ar5">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="63" y="107" width="275" height="275"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="275" id="uof-9T-8vI"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="uof-9T-8vI"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="uof-9T-8vI"/>
+                        </mask>
                     </variation>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LHf-LL-1kG">
                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="140" id="74z-5T-6fy"/>
+                    </constraints>
                     <state key="normal" title="Add New Image"/>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="130.5" y="431" width="140" height="30"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="74z-5T-6fy"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="74z-5T-6fy"/>
+                        </mask>
                     </variation>
                     <connections>
                         <action selector="addImageButtonTapped:" destination="-1" eventType="touchUpInside" id="dAD-dL-GzN"/>
@@ -44,9 +61,19 @@
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wSI-Ra-Ppo">
                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="125" id="ZAx-XH-fra"/>
+                    </constraints>
                     <state key="normal" title="Create Songage"/>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="138" y="506" width="125" height="30"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="ZAx-XH-fra"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="ZAx-XH-fra"/>
+                        </mask>
                     </variation>
                     <connections>
                         <action selector="createSongageTapped:" destination="-1" eventType="touchUpInside" id="OCj-TT-DiV"/>
@@ -54,12 +81,34 @@
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="KLX-ok-ar5" firstAttribute="top" secondItem="uon-3o-dGB" secondAttribute="bottom" constant="55" id="FXM-TN-Ate"/>
+                <constraint firstItem="uon-3o-dGB" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Mxc-64-XWa"/>
+                <constraint firstItem="KLX-ok-ar5" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="63" id="RUw-oX-E7s"/>
+                <constraint firstItem="uon-3o-dGB" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="31" id="XV4-Xy-AfC"/>
+                <constraint firstItem="LHf-LL-1kG" firstAttribute="centerX" secondItem="wSI-Ra-Ppo" secondAttribute="centerX" id="Xnz-OZ-kVs"/>
+                <constraint firstItem="KLX-ok-ar5" firstAttribute="centerX" secondItem="LHf-LL-1kG" secondAttribute="centerX" id="eqi-ZX-uGB"/>
+                <constraint firstItem="LHf-LL-1kG" firstAttribute="top" secondItem="KLX-ok-ar5" secondAttribute="bottom" constant="49" id="fle-UL-Y1f"/>
+                <constraint firstItem="wSI-Ra-Ppo" firstAttribute="top" secondItem="LHf-LL-1kG" secondAttribute="bottom" constant="45" id="sv6-vG-wrt"/>
+                <constraint firstItem="uon-3o-dGB" firstAttribute="centerX" secondItem="KLX-ok-ar5" secondAttribute="centerX" id="z5I-NT-pAO"/>
+            </constraints>
             <variation key="default">
                 <mask key="subviews">
                     <exclude reference="uon-3o-dGB"/>
                     <exclude reference="KLX-ok-ar5"/>
                     <exclude reference="LHf-LL-1kG"/>
                     <exclude reference="wSI-Ra-Ppo"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="FXM-TN-Ate"/>
+                    <exclude reference="RUw-oX-E7s"/>
+                    <exclude reference="eqi-ZX-uGB"/>
+                    <exclude reference="Mxc-64-XWa"/>
+                    <exclude reference="XV4-Xy-AfC"/>
+                    <exclude reference="z5I-NT-pAO"/>
+                    <exclude reference="Xnz-OZ-kVs"/>
+                    <exclude reference="fle-UL-Y1f"/>
+                    <exclude reference="sv6-vG-wrt"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
@@ -68,6 +117,17 @@
                     <include reference="KLX-ok-ar5"/>
                     <include reference="LHf-LL-1kG"/>
                     <include reference="wSI-Ra-Ppo"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="FXM-TN-Ate"/>
+                    <include reference="RUw-oX-E7s"/>
+                    <include reference="eqi-ZX-uGB"/>
+                    <include reference="Mxc-64-XWa"/>
+                    <include reference="XV4-Xy-AfC"/>
+                    <include reference="z5I-NT-pAO"/>
+                    <include reference="Xnz-OZ-kVs"/>
+                    <include reference="fle-UL-Y1f"/>
+                    <include reference="sv6-vG-wrt"/>
                 </mask>
             </variation>
         </view>

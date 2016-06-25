@@ -92,6 +92,8 @@ class SpotifyAPIManager
                         trackURIs.append(track.uri)
                     }
                     
+                    
+                    print("STARTED REPLACE URIS FUNCTION WITH NEWLY LOGGEDIN PLAYER")
                     // get the uris into the player and ready to play
                     self.player?.replaceURIs(trackURIs, withCurrentTrack: 0, callback: {(error:NSError!) -> Void in
                         
@@ -115,6 +117,8 @@ class SpotifyAPIManager
                 trackURIs.append(track.uri)
             }
             
+            print("STARTED REPLACE URIS FUNCTION WITH ALREADY LOGGED IN PLAYER")
+
             // get the uris into the player and ready to play
             self.player?.replaceURIs(trackURIs, withCurrentTrack: 0, callback: {(error:NSError!) -> Void in
                 

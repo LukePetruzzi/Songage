@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -100,17 +101,17 @@
                     <exclude reference="Pog-zc-Hce"/>
                 </mask>
                 <mask key="constraints">
-                    <exclude reference="QSh-5u-yLz"/>
-                    <exclude reference="YZ1-uy-WNE"/>
-                    <exclude reference="ome-Sj-9as"/>
+                    <exclude reference="6va-B8-KL9"/>
+                    <exclude reference="f1h-JK-Pva"/>
+                    <exclude reference="u8N-q3-2eT"/>
                     <exclude reference="2lK-MJ-h8Q"/>
                     <exclude reference="cT3-8p-D4d"/>
                     <exclude reference="ATc-EG-722"/>
                     <exclude reference="hzV-zB-01L"/>
                     <exclude reference="neH-Kt-P9n"/>
-                    <exclude reference="6va-B8-KL9"/>
-                    <exclude reference="f1h-JK-Pva"/>
-                    <exclude reference="u8N-q3-2eT"/>
+                    <exclude reference="QSh-5u-yLz"/>
+                    <exclude reference="YZ1-uy-WNE"/>
+                    <exclude reference="ome-Sj-9as"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
@@ -121,17 +122,17 @@
                     <include reference="Pog-zc-Hce"/>
                 </mask>
                 <mask key="constraints">
-                    <include reference="QSh-5u-yLz"/>
-                    <include reference="YZ1-uy-WNE"/>
-                    <include reference="ome-Sj-9as"/>
+                    <include reference="6va-B8-KL9"/>
+                    <include reference="f1h-JK-Pva"/>
+                    <include reference="u8N-q3-2eT"/>
                     <include reference="2lK-MJ-h8Q"/>
                     <include reference="cT3-8p-D4d"/>
                     <include reference="ATc-EG-722"/>
                     <include reference="hzV-zB-01L"/>
                     <include reference="neH-Kt-P9n"/>
-                    <include reference="6va-B8-KL9"/>
-                    <include reference="f1h-JK-Pva"/>
-                    <include reference="u8N-q3-2eT"/>
+                    <include reference="QSh-5u-yLz"/>
+                    <include reference="YZ1-uy-WNE"/>
+                    <include reference="ome-Sj-9as"/>
                 </mask>
             </variation>
         </view>
