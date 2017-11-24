@@ -50,25 +50,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // allow facebook to track installs and app opens
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool
     {
-        print("HERE's THE SCHEME: \(url.scheme)")
+        print("HERE's THE SCHEME: \(url.scheme!)")
+        print("AND THIS IS THE URL: \(url.absoluteString)")
         
         // handle spotify's schemes
-        if url.scheme == "songage"
+        if url.scheme! == "songage" || url.scheme! == "spotify-action"
         {
             // check that spotify can hendle the URL it was handed
             if SPTAuth.defaultInstance().canHandle(url)
             {
+                print("FIRST LAYER INSIDE")
                 // let spotify handle the url
                 SPTAuth.defaultInstance().handleAuthCallback(withTriggeredAuthURL: url, callback: {(error:NSError!, session:SPTSession!) -> Void in
-                    
+                    print("WE REALLY INSIDE")
                     // check if there's an error
                     if error != nil
                     {
+                        print("WE HAVE N ERROR")
                         print("SPOTIFY AUTHENTIFICATION ERROR IN APPDELEGATE: \(error.localizedDescription)")
                         return // get out of the callback
                     }
                     else // no error!
                     {
+                        print("APPARENTLY NO ERROR")
                         // VERY IMPORTANT: CREATE THE SESSION FOR THE FIRST TIME
                         SPTAuth.defaultInstance().session = session
                         
@@ -81,12 +85,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         // the session is now available and saved. Send user to main screen
                         self.window?.rootViewController = ChooseImageViewController(nibName: "ChooseImageViewController", bundle: nil)
                     }
-                })
+                } as! SPTAuthCallback)
             }
             else {
                 print("SPOTIFY CANT HANDLE THE URL")
             }
-            
         } // handle facebook's schemes
         else if url.scheme == "fb1074091485995679"
         {

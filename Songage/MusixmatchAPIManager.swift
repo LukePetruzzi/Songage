@@ -17,12 +17,11 @@ class MusixmatchAPIManager
             Static.instance = MusixmatchAPIManager()
         }()
     // Use singleton convention
+    struct Static {
+        static var instance:MusixmatchAPIManager?
+        static var token: Int = 0
+    }
     class var sharedInstance: MusixmatchAPIManager {
-        struct Static {
-            static var instance:MusixmatchAPIManager?
-            static var token: Int = 0
-        }
-        
         _ = MusixmatchAPIManager.__once
         return Static.instance!
     }
@@ -52,7 +51,7 @@ class MusixmatchAPIManager
         ]
         
         // make the request
-        let request = Alamofire.request(.GET, "https://api.musixmatch.com/ws/1.1/track.search", parameters: parameters)
+        let request = Alamofire.request("https://api.musixmatch.com/ws/1.1/track.search", method: .get, parameters: parameters)
         
        // print("THIS IS THE URL SENT: \(request.request?.URLString)")
         
@@ -82,12 +81,12 @@ class MusixmatchAPIManager
                 }
                 
                 // send the tracks back
-                completion(returnStuff: returnTracks, error: nil)
+                completion(returnTracks, nil)
             }
             else
             {
                 print("ERROR IN TRACKSEARCH: \(response.result.error!.localizedDescription)")
-                completion(returnStuff: nil, error: response.result.error)
+                completion(nil, response.result.error! as NSError)
             }
         }
         

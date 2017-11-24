@@ -245,9 +245,6 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
                 // save the tracks
                 SongsList.sharedInstance.setSongsList(returnedTracks!)
                 
-                
-                
-                
                 // set up the tracks on the player
                 SpotifyAPIManager.sharedInstance.setupPlayerWithQueueOfSongs(returnedTracks!, completion: {(error) -> Void in
                     
@@ -260,7 +257,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
                         var albumObtainedCount = 0
                         
                         // load the albums once at a time
-                        DispatchQueue.global(priority: Int(DispatchQoS.QoSClass.userInitiated.rawValue)).async
+                        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async
                         {
                             
                             let dispatchGroup = DispatchGroup()

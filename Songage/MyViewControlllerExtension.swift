@@ -18,7 +18,7 @@ extension UIViewController
         let session = URLSession.shared
         let request = URLRequest(url: imageUrl)
         
-        DispatchQueue.global(priority: Int(DispatchQoS.QoSClass.userInitiated.rawValue)).async
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async
         {
             // dispatch group to wait for stuff
             let dispatchGroup = DispatchGroup()
@@ -33,12 +33,12 @@ extension UIViewController
                 }
                 else // no error. use the data
                 {
-                    completion(image: UIImage(data: data!))
+                    completion(UIImage(data: data!))
                 }
                 
                 // let wait stop waiting
                 dispatchGroup.leave()
-            })
+                } as! (Data?, URLResponse?, Error?) -> Void)
             dataTask.resume()
             
             // wait for closure to finish

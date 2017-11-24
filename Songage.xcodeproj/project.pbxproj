@@ -214,7 +214,7 @@
 					4071B97F1D17E974009B4151 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = JXML5VQZ23;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 0910;
 					};
 				};
 			};
@@ -455,7 +455,8 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "./Songage/Songage-Bridging-Header.h";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "./Songage/Songage-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -498,7 +499,8 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "./Songage/Songage-Bridging-Header.h";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "./Songage/Songage-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

@@ -117,7 +117,7 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
             // set the player to false
             player.setIsPlaying(false, callback: {(error) in
                 if error != nil {
-                    self.showAlertWithError(error, stringBeforeMessage: "Error pausing the song: ")
+                    self.showAlertWithError(error as! NSError, stringBeforeMessage: "Error pausing the song: ")
                 }
             })
             // pausing the song now. It should say play is an option

@@ -16,12 +16,11 @@ class ClarifaiAPIManager
             Static.instance = ClarifaiAPIManager()
         }()
     // Use singleton convention
+    struct Static {
+        static var instance:ClarifaiAPIManager?
+        static var token: Int = 0
+    }
     class var sharedInstance: ClarifaiAPIManager {
-        struct Static {
-            static var instance:ClarifaiAPIManager?
-            static var token: Int = 0
-        }
-        
         _ = ClarifaiAPIManager.__once
         return Static.instance!
     }
@@ -55,7 +54,7 @@ class ClarifaiAPIManager
         // add a loading overlay to view if one passed
         presentingViewController.addLoadingOverlay()
         
-        DispatchQueue.global(priority: Int(DispatchQoS.QoSClass.userInitiated.rawValue)).async {
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
             
             let dispatchGroup = DispatchGroup()
             
@@ -70,7 +69,7 @@ class ClarifaiAPIManager
                     if thisError != nil
                     {
                         // call the completion with error from getToken function
-                        completion(tags: nil, error: thisError)
+                        completion(nil, thisError)
                     }
                     // let the dispatchGroup know that the closure is finished
                     dispatchGroup.leave()
@@ -98,8 +97,8 @@ class ClarifaiAPIManager
             print("THIS IS THE TOKEN AT START OF FUNCTION: \(self.myAccessToken)")
             
             // send the request
-            let request = Alamofire.request(.POST, "https://api.clarifai.com/v1/tag/", parameters: parameters, encoding: .url, headers: headers)
             
+            let request = Alamofire.request("https://api.clarifai.com/v1/tag/", method: .post, parameters: parameters, headers: headers)
             var finalValues:[String] = []
             
             // do things with the reponse
@@ -121,7 +120,7 @@ class ClarifaiAPIManager
                         }
                         
                         // send back the completion function with the values of the tags
-                        completion(tags: finalValues, error: nil)
+                        completion(finalValues, nil)
                     }
                     else if response.response!.statusCode == 401 // There is a problem with the token. Probably too old. Refresh it
                     {
@@ -132,7 +131,7 @@ class ClarifaiAPIManager
                             if thisError != nil
                             {
                                 // call the completion with error from getToken function
-                                completion(tags: nil, error: thisError)
+                                completion(nil, thisError)
                             }
                             // let the dispatchGroup know that the closure is finished
                             dispatchGroup.leave()
@@ -155,13 +154,13 @@ class ClarifaiAPIManager
                     else // there was some other error that I ain't touching
                     {
                         // return the error if there is one
-                        completion(tags: nil, error: response.result.error)
+                        completion(nil, response.result.error! as NSError)
                     }
                 }
                 else // there was some error. return it.
                 {
                     // return the error if there is one
-                    completion(tags: nil, error: response.result.error!)
+                    completion(nil, response.result.error! as NSError)
                 }
             }
         }
@@ -183,7 +182,7 @@ class ClarifaiAPIManager
         ]
         
         // send the request
-        let request = Alamofire.request(.POST, "https://api.clarifai.com/v1/token/", parameters: parameters)
+        let request = Alamofire.request("https://api.clarifai.com/v1/token/", method: .post, parameters: parameters)
         
         // do things with the reponse
         request.responseJSON { response in
@@ -194,18 +193,18 @@ class ClarifaiAPIManager
                 let json = JSON(response.result.value!)
                 
                 // save the token
-                self.myAccessToken = String(json["access_token"])
+                self.myAccessToken = String(describing: json["access_token"])
                 
                 print("token saved! token is: \(self.myAccessToken!)")
                 
                 // update token boolean
                 self.updatedMyAccessToken = true
                 
-                completion(error: nil)
+                completion(nil)
             }
             else
             {
-                completion(error: response.result.error)
+                completion(response.result.error! as NSError)
             }
         }
     }

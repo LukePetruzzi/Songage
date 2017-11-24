@@ -15,12 +15,11 @@ class SongsList
             Static.instance = SongsList()
         }()
     // Use singleton convention
+    struct Static {
+        static var instance:SongsList?
+        static var token: Int = 0
+    }
     class var sharedInstance: SongsList {
-        struct Static {
-            static var instance:SongsList?
-            static var token: Int = 0
-        }
-        
         _ = SongsList.__once
         return Static.instance!
     }

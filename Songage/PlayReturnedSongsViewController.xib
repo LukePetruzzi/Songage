@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -27,22 +27,6 @@
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tc0-68-9Y0">
-                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="250" id="xnC-rp-HhJ"/>
-                    </constraints>
-                    <variation key="default">
-                        <mask key="constraints">
-                            <exclude reference="xnC-rp-HhJ"/>
-                        </mask>
-                    </variation>
-                    <variation key="heightClass=regular-widthClass=compact">
-                        <mask key="constraints">
-                            <include reference="xnC-rp-HhJ"/>
-                        </mask>
-                    </variation>
-                </imageView>
                 <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TM1-mw-HeA">
                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                     <constraints>
@@ -82,6 +66,22 @@
                         </mask>
                     </variation>
                 </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tc0-68-9Y0">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="250" id="xnC-rp-HhJ"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="xnC-rp-HhJ"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="xnC-rp-HhJ"/>
+                        </mask>
+                    </variation>
+                </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -100,9 +100,9 @@
             <variation key="default">
                 <mask key="subviews">
                     <exclude reference="LBl-kt-YuE"/>
-                    <exclude reference="tc0-68-9Y0"/>
                     <exclude reference="TM1-mw-HeA"/>
                     <exclude reference="Pog-zc-Hce"/>
+                    <exclude reference="tc0-68-9Y0"/>
                 </mask>
                 <mask key="constraints">
                     <exclude reference="6va-B8-KL9"/>
@@ -121,9 +121,9 @@
             <variation key="heightClass=regular-widthClass=compact">
                 <mask key="subviews">
                     <include reference="LBl-kt-YuE"/>
-                    <include reference="tc0-68-9Y0"/>
                     <include reference="TM1-mw-HeA"/>
                     <include reference="Pog-zc-Hce"/>
+                    <include reference="tc0-68-9Y0"/>
                 </mask>
                 <mask key="constraints">
                     <include reference="6va-B8-KL9"/>
