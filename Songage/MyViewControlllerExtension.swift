@@ -13,19 +13,19 @@ public let LOADING_OVERLAY_VIEW_TAG = 987432
 
 extension UIViewController
 {
-    public func requestImage(imageUrl: NSURL, completion: (image:UIImage?) -> Void)
+    public func requestImage(_ imageUrl: URL, completion: @escaping (_ image:UIImage?) -> Void)
     {
-        let session = NSURLSession.sharedSession()
-        let request = NSURLRequest(URL: imageUrl)
+        let session = URLSession.shared
+        let request = URLRequest(url: imageUrl)
         
-        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0))
+        DispatchQueue.global(priority: Int(DispatchQoS.QoSClass.userInitiated.rawValue)).async
         {
             // dispatch group to wait for stuff
-            let dispatchGroup = dispatch_group_create()
+            let dispatchGroup = DispatchGroup()
             
             // allow the the function to wait for the closure
-            dispatch_group_enter(dispatchGroup)
-            let dataTask = session.dataTaskWithRequest(request, completionHandler: {(data:NSData?, response:NSURLResponse?, error:NSError?) -> Void in
+            dispatchGroup.enter()
+            let dataTask = session.dataTask(with: request, completionHandler: {(data:Data?, response:URLResponse?, error:NSError?) -> Void in
                 
                 if error != nil
                 {
@@ -37,16 +37,16 @@ extension UIViewController
                 }
                 
                 // let wait stop waiting
-                dispatch_group_leave(dispatchGroup)
+                dispatchGroup.leave()
             })
             dataTask.resume()
             
             // wait for closure to finish
-            dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
+            dispatchGroup.wait(timeout: DispatchTime.distantFuture)
         }
     }
     
-    func showAlertWithError(error:NSError, stringBeforeMessage:String?)
+    func showAlertWithError(_ error:NSError, stringBeforeMessage:String?)
     {
         var preErrorString = stringBeforeMessage
         
@@ -54,12 +54,12 @@ extension UIViewController
             preErrorString = ""
         }
         
-        let alert = UIAlertController(title: "Error", message: "\(preErrorString!)\n\(error.localizedDescription)", preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+        let alert = UIAlertController(title: "Error", message: "\(preErrorString!)\n\(error.localizedDescription)", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Okay", style: .default, handler: nil)
         alert.addAction(okAction)
         
         // show the alert to the calling viewController
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
         // dismiss loading overlay because error
         self.removeLoadingOverlay()
@@ -69,19 +69,19 @@ extension UIViewController
     // create a loading view overlay
     func addLoadingOverlay()
     {
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
         
         // disable user interaction while loading
-        appDelegate.window?.userInteractionEnabled = false
+        appDelegate.window?.isUserInteractionEnabled = false
         
         //add an overlay screen
         let overlayImage = UIImageView(frame: self.view.frame)
-        overlayImage.backgroundColor = UIColor.blackColor()
+        overlayImage.backgroundColor = UIColor.black
         overlayImage.alpha = 0.5
         overlayImage.tag = LOADING_OVERLAY_VIEW_TAG
         
         let loadingSpinner = UIActivityIndicatorView(frame: overlayImage.frame)
-        loadingSpinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+        loadingSpinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
         loadingSpinner.startAnimating()
         overlayImage.addSubview(loadingSpinner)
         
@@ -93,7 +93,7 @@ extension UIViewController
     func removeLoadingOverlay()
     {
         
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
         
         for view in appDelegate.window!.subviews  {
             if (view.tag == LOADING_OVERLAY_VIEW_TAG)   {
@@ -102,7 +102,7 @@ extension UIViewController
         }
         
         // reenable user interaction after loading
-        appDelegate.window?.userInteractionEnabled = true
+        appDelegate.window?.isUserInteractionEnabled = true
     }
     
 }

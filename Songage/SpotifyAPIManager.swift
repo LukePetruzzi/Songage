@@ -10,16 +10,17 @@ import Foundation
 
 class SpotifyAPIManager
 {
+    private static var __once: () = {
+            Static.instance = SpotifyAPIManager()
+        }()
     // Use singleton convention
     class var sharedInstance: SpotifyAPIManager {
         struct Static {
             static var instance:SpotifyAPIManager?
-            static var token: dispatch_once_t = 0
+            static var token: Int = 0
         }
         
-        dispatch_once(&Static.token)    {
-            Static.instance = SpotifyAPIManager()
-        }
+        _ = SpotifyAPIManager.__once
         return Static.instance!
     }
     
@@ -38,30 +39,30 @@ class SpotifyAPIManager
         let auth = SPTAuth.defaultInstance()
         
         // set all parameters for the login url
-        auth.clientID = kClientID
-        auth.redirectURL = NSURL(string: kCallbackURL)
-        auth.tokenSwapURL = NSURL(string: kTokenSwapURL)
-        auth.tokenRefreshURL = NSURL(string: kTokenRefreshServiceURL)
+        auth?.clientID = kClientID
+        auth?.redirectURL = URL(string: kCallbackURL)
+        auth?.tokenSwapURL = URL(string: kTokenSwapURL)
+        auth?.tokenRefreshURL = URL(string: kTokenRefreshServiceURL)
         
         // set the scopes for login... SUPER IMPORTANT THAT I SET ALL THE SCOPES I WANT TO USE
-        auth.requestedScopes = [SPTAuthStreamingScope]
+        auth?.requestedScopes = [SPTAuthStreamingScope]
         
         // Set the spotify session if necessary
-        if let sessionObject:AnyObject = NSUserDefaults.standardUserDefaults().objectForKey("SpotifySession")
+        if let sessionObject:AnyObject = UserDefaults.standard.object(forKey: "SpotifySession") as AnyObject?
         {
             // cast to data object
-            let sessionDataObject = sessionObject as! NSData
+            let sessionDataObject = sessionObject as! Data
             
             // get the actual session
-            let savedSession = NSKeyedUnarchiver.unarchiveObjectWithData(sessionDataObject) as! SPTSession
+            let savedSession = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObject) as! SPTSession
             
-            auth.session = savedSession
+            auth?.session = savedSession
         }
         
         
     }
     
-    func setupPlayerWithQueueOfSongs(tracksToQueue:[SPTTrack], completion:((error:NSError?) -> Void))
+    func setupPlayerWithQueueOfSongs(_ tracksToQueue:[SPTTrack], completion:@escaping ((_ error:NSError?) -> Void))
     {
         
         print("TRACKS RECEIVED. FIRST ONE: \(tracksToQueue[0].name)")
@@ -78,7 +79,7 @@ class SpotifyAPIManager
         
         if !(player?.loggedIn)!
         {
-            self.player?.loginWithSession(SPTAuth.defaultInstance().session, callback: {(error:NSError!) -> Void in
+            self.player?.login(with: SPTAuth.defaultInstance().session, callback: {(error:NSError!) -> Void in
                 
                 if error != nil
                 {
@@ -86,7 +87,7 @@ class SpotifyAPIManager
                 }
                 else // no error. play the tracks
                 {
-                    var trackURIs:[NSURL] = []
+                    var trackURIs:[URL] = []
                     // get the uris for all the tracks
                     for track in tracksToQueue {
                         trackURIs.append(track.uri)
@@ -111,7 +112,7 @@ class SpotifyAPIManager
         }
         else// session already logged in. just get the tracks
         {
-            var trackURIs:[NSURL] = []
+            var trackURIs:[URL] = []
             // get the uris for all the tracks
             for track in tracksToQueue {
                 trackURIs.append(track.uri)
@@ -135,7 +136,7 @@ class SpotifyAPIManager
     }
     
     // refresh the player by deleting its songs in its indices.
-    func renewPlayer(completion:((error:NSError?) -> Void))
+    func renewPlayer(_ completion:@escaping ((_ error:NSError?) -> Void))
     {
         // if the player hasn't been initialized... do so
         if player == nil {
@@ -147,20 +148,20 @@ class SpotifyAPIManager
         player?.stop({(error) in
             
             if error != nil {
-                completion(error: error)
+                completion(error as NSError?)
                 return
             }
             print("PLAYER REFRESHED")
         })
     }
     
-    func playTrackWithSentIndex(indexOfTrack:Int32, completion:((error:NSError?) -> Void))
+    func playTrackWithSentIndex(_ indexOfTrack:Int32, completion:@escaping ((_ error:NSError?) -> Void))
     {
-        player?.playURIsFromIndex(indexOfTrack, callback: {(error) in
+        player?.playURIs(from: indexOfTrack, callback: {(error) in
             
             if error != nil
             {
-                completion(error: error)
+                completion(error as NSError?)
             }
             else{
                 print("SONG SHOULD BE PLAYING!!!")
@@ -168,17 +169,17 @@ class SpotifyAPIManager
         })
     }
     
-    func getSpotifyTracks(spotifyTrackIDs:[String], completion: (returnedTracks:[SPTTrack]?, error:NSError?) -> Void)
+    func getSpotifyTracks(_ spotifyTrackIDs:[String], completion: @escaping (_ returnedTracks:[SPTTrack]?, _ error:NSError?) -> Void)
     {
         // format the IDs into URIs to send to Spotify
-        var trackURIs:[NSURL] = []
+        var trackURIs:[URL] = []
         
         for trackID in spotifyTrackIDs {
-            trackURIs.append(NSURL(string: "spotify:track:\(trackID)")!)
+            trackURIs.append(URL(string: "spotify:track:\(trackID)")!)
         }
         
         // if doesnt work prolly cuz of trackURIs??
-        SPTTrack.tracksWithURIs(trackURIs, session: SPTAuth.defaultInstance().session, callback: {(error:NSError!, trackObject:AnyObject!) -> Void in
+        SPTTrack.tracks(withURIs: trackURIs, session: SPTAuth.defaultInstance().session, callback: {(error:NSError!, trackObject:AnyObject!) -> Void in
             
             // check for errors
             if error != nil
@@ -201,27 +202,27 @@ class SpotifyAPIManager
     }
     
     // return the session or nil if there was an error when updating
-    func updateSessionIfNeeded(completion:((error:NSError?) -> Void))
+    func updateSessionIfNeeded(_ completion:@escaping ((_ error:NSError?) -> Void))
     {
-        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0))
+        DispatchQueue.global(priority: Int(DispatchQoS.QoSClass.userInitiated.rawValue)).async
         {
             // dispatch group to wait for stuff
-            let dispatchGroup = dispatch_group_create()
+            let dispatchGroup = DispatchGroup()
             
             // Refresh the spotify token if necessary
-            let userDefaults = NSUserDefaults.standardUserDefaults()
+            let userDefaults = UserDefaults.standard
             
             // can force unwrap because user never gets to this screen without a session
-            let sessionDataObject:NSData = userDefaults.objectForKey("SpotifySession")! as! NSData
+            let sessionDataObject:Data = userDefaults.object(forKey: "SpotifySession")! as! Data
             
             // get the actual session
-            let oldSession = NSKeyedUnarchiver.unarchiveObjectWithData(sessionDataObject) as! SPTSession
+            let oldSession = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObject) as! SPTSession
             
             // update the session if it's no longer valid
             if !oldSession.isValid()
             {
                 // allow the the function to wait for the closure
-                dispatch_group_enter(dispatchGroup)
+                dispatchGroup.enter()
                 // session is not valid... update it
                 SPTAuth.defaultInstance().renewSession(oldSession, callback: {(error:NSError!, newSession:SPTSession!) -> Void in
                     
@@ -229,8 +230,8 @@ class SpotifyAPIManager
                     if error == nil
                     {
                         // save the session
-                        let sessionData = NSKeyedArchiver.archivedDataWithRootObject(newSession)
-                        userDefaults.setObject(sessionData, forKey: "SpotifySession")
+                        let sessionData = NSKeyedArchiver.archivedData(withRootObject: newSession)
+                        userDefaults.set(sessionData, forKey: "SpotifySession")
                         userDefaults.synchronize()
                         
                         // update my session
@@ -247,10 +248,10 @@ class SpotifyAPIManager
                     }
                     
                     // let wait stop waiting
-                    dispatch_group_leave(dispatchGroup)
+                    dispatchGroup.leave()
                 })
                 // wait for closure to finish
-                dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
+                dispatchGroup.wait(timeout: DispatchTime.distantFuture)
             }
             else // old session is still valid. Return and use it
             {

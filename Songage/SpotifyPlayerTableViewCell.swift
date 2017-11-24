@@ -10,7 +10,7 @@ import UIKit
 
 protocol SpotifyPlayerTableViewCellDelegate
 {
-    func cellWasSelected(cell:SpotifyPlayerTableViewCell)
+    func cellWasSelected(_ cell:SpotifyPlayerTableViewCell)
 }
 
 class SpotifyPlayerTableViewCell: UITableViewCell
@@ -30,7 +30,7 @@ class SpotifyPlayerTableViewCell: UITableViewCell
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state

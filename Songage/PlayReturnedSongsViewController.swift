@@ -20,13 +20,14 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
     var albumCovers:[UIImage] = []
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         // set up the tableView
         self.setupTableView()
         
         // make it so the image goes in real good
-        analyzedPhotoImageView.contentMode = .ScaleAspectFit
+        analyzedPhotoImageView.contentMode = .scaleAspectFit
         // put the photo in the imageView
         analyzedPhotoImageView.image = SongsList.sharedInstance.getCurrentImage()
         tracks = SongsList.sharedInstance.getSongsList()
@@ -35,7 +36,7 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         
     }
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         
         // update the session if needed
@@ -61,21 +62,21 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         songsTableView.dataSource = self
         
         // register my custom nib
-        songsTableView.registerNib(UINib(nibName: "SpotifyPlayerTableViewCell", bundle: nil), forCellReuseIdentifier: "SpotifyPlayerTableViewCell")
+        songsTableView.register(UINib(nibName: "SpotifyPlayerTableViewCell", bundle: nil), forCellReuseIdentifier: "SpotifyPlayerTableViewCell")
         
         // set the height
         songsTableView.rowHeight = CGFloat(85)
         
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return SongsList.sharedInstance.getSongsList().count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = songsTableView.dequeueReusableCellWithIdentifier("SpotifyPlayerTableViewCell") as! SpotifyPlayerTableViewCell
+        let cell = songsTableView.dequeueReusableCell(withIdentifier: "SpotifyPlayerTableViewCell") as! SpotifyPlayerTableViewCell
         
         // get the data for the cell
         if tracks != nil
@@ -91,7 +92,7 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         // if user has been away, the session may be old
         SpotifyAPIManager.sharedInstance.updateSessionIfNeeded({(error) in
@@ -103,7 +104,7 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         })
         
         let player = SpotifyAPIManager.sharedInstance.player!
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! SpotifyPlayerTableViewCell
+        let cell = tableView.cellForRow(at: indexPath) as! SpotifyPlayerTableViewCell
 
         
         print("TRACK SELECTED: \(tracks![indexPath.row].name)")
@@ -111,7 +112,7 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
         if indexPath.row == Int(player.currentTrackIndex) && player.isPlaying
         {
             // deselect the row
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
             
             // set the player to false
             player.setIsPlaying(false, callback: {(error) in
@@ -153,12 +154,12 @@ class PlayReturnedSongsViewController: UIViewController, UITableViewDelegate, UI
 //        }
 //    }
     
-    @IBAction func newSongageButtonTapped(sender: UIButton)
+    @IBAction func newSongageButtonTapped(_ sender: UIButton)
     {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    override func viewDidDisappear(animated: Bool)
+    override func viewDidDisappear(_ animated: Bool)
     {
         // refresh the player for the next go around
         SpotifyAPIManager.sharedInstance.renewPlayer({(error) in

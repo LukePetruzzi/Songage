@@ -23,15 +23,15 @@ class SpotifyLoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func loginButtonTapped(sender: UIButton)
+    @IBAction func loginButtonTapped(_ sender: UIButton)
     {
         // create an auth instance
         let auth = SPTAuth.defaultInstance()
         
         // get the login URL
-        let loginURL = auth.loginURL
+        let loginURL = auth?.loginURL
         
-        UIApplication.sharedApplication().openURL(loginURL)
+        UIApplication.shared.openURL(loginURL!)
         
         
     }

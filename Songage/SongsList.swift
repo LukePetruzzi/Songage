@@ -11,28 +11,29 @@ import Foundation
 // class to pass data between the ViewControllers
 class SongsList
 {
+    private static var __once: () = {
+            Static.instance = SongsList()
+        }()
     // Use singleton convention
     class var sharedInstance: SongsList {
         struct Static {
             static var instance:SongsList?
-            static var token: dispatch_once_t = 0
+            static var token: Int = 0
         }
         
-        dispatch_once(&Static.token)    {
-            Static.instance = SongsList()
-        }
+        _ = SongsList.__once
         return Static.instance!
     }
     
     // image that the user is currently sending
-    private var currentImage:UIImage = UIImage(named: "defaultImage")!
+    fileprivate var currentImage:UIImage = UIImage(named: "defaultImage")!
     // list of songs for the current list
-    private var currentTracksList:[SPTTrack] = []
+    fileprivate var currentTracksList:[SPTTrack] = []
     // save the pics for the albums
-    private var currentTracksAlbumsCoversList:[UIImage] = []
+    fileprivate var currentTracksAlbumsCoversList:[UIImage] = []
 
     
-    func setSongsList(newSongsList:[SPTTrack])
+    func setSongsList(_ newSongsList:[SPTTrack])
     {
         self.currentTracksList = newSongsList
     }
@@ -42,7 +43,7 @@ class SongsList
         return self.currentTracksList
     }
     
-    func setCurrentImage(newImage:UIImage)
+    func setCurrentImage(_ newImage:UIImage)
     {
         self.currentImage = newImage
     }
@@ -53,7 +54,7 @@ class SongsList
         return self.currentImage
     }
     
-    func setAlbumCovers(covers:[UIImage])
+    func setAlbumCovers(_ covers:[UIImage])
     {
         self.currentTracksAlbumsCoversList = covers
     }

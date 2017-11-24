@@ -100,15 +100,15 @@
                     <exclude reference="wSI-Ra-Ppo"/>
                 </mask>
                 <mask key="constraints">
-                    <exclude reference="FXM-TN-Ate"/>
-                    <exclude reference="RUw-oX-E7s"/>
-                    <exclude reference="eqi-ZX-uGB"/>
-                    <exclude reference="Mxc-64-XWa"/>
-                    <exclude reference="XV4-Xy-AfC"/>
-                    <exclude reference="z5I-NT-pAO"/>
                     <exclude reference="Xnz-OZ-kVs"/>
                     <exclude reference="fle-UL-Y1f"/>
                     <exclude reference="sv6-vG-wrt"/>
+                    <exclude reference="Mxc-64-XWa"/>
+                    <exclude reference="XV4-Xy-AfC"/>
+                    <exclude reference="z5I-NT-pAO"/>
+                    <exclude reference="FXM-TN-Ate"/>
+                    <exclude reference="RUw-oX-E7s"/>
+                    <exclude reference="eqi-ZX-uGB"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
@@ -119,15 +119,15 @@
                     <include reference="wSI-Ra-Ppo"/>
                 </mask>
                 <mask key="constraints">
-                    <include reference="FXM-TN-Ate"/>
-                    <include reference="RUw-oX-E7s"/>
-                    <include reference="eqi-ZX-uGB"/>
-                    <include reference="Mxc-64-XWa"/>
-                    <include reference="XV4-Xy-AfC"/>
-                    <include reference="z5I-NT-pAO"/>
                     <include reference="Xnz-OZ-kVs"/>
                     <include reference="fle-UL-Y1f"/>
                     <include reference="sv6-vG-wrt"/>
+                    <include reference="Mxc-64-XWa"/>
+                    <include reference="XV4-Xy-AfC"/>
+                    <include reference="z5I-NT-pAO"/>
+                    <include reference="FXM-TN-Ate"/>
+                    <include reference="RUw-oX-E7s"/>
+                    <include reference="eqi-ZX-uGB"/>
                 </mask>
             </variation>
         </view>

@@ -92,8 +92,9 @@ typedef NS_ENUM(NSUInteger, FBSDKInternalUtilityVersionShift)
   static NSBundle *bundle;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    NSString *stringsBundlePath = [[NSBundle mainBundle] pathForResource:@"FacebookSDKStrings"
-                                                                  ofType:@"bundle"];
+    NSString *stringsBundlePath = [[NSBundle bundleForClass:[FBSDKApplicationDelegate class]]
+                                   pathForResource:@"FacebookSDKStrings"
+                                   ofType:@"bundle"];
     bundle = [NSBundle bundleWithPath:stringsBundlePath] ?: [NSBundle mainBundle];
   });
   return bundle;
@@ -187,7 +188,7 @@ setJSONStringForObject:(id)object
   }
   host = [NSString stringWithFormat:@"%@%@", hostPrefix ?: @"", host ?: @""];
 
-  NSString *version = defaultVersion ?: FBSDK_TARGET_PLATFORM_VERSION;
+  NSString *version = defaultVersion ?: [FBSDKSettings graphAPIVersion];
   if ([version length]) {
     version = [@"/" stringByAppendingString:version];
   }
@@ -198,6 +199,10 @@ setJSONStringForObject:(id)object
         [versionScanner scanInteger:NULL] &&
         [versionScanner scanString:@"." intoString:NULL] &&
         [versionScanner scanInteger:NULL]) {
+      [FBSDKLogger singleShotLogEntry:FBSDKLoggingBehaviorDeveloperErrors
+                             logEntry:[NSString stringWithFormat:@"Invalid Graph API version:%@, assuming %@ instead",
+                                       version,
+                                       [FBSDKSettings graphAPIVersion]]];
       version = nil;
     }
     if (![path hasPrefix:@"/"]) {
@@ -488,11 +493,7 @@ static NSMapTable *_transientObjects;
   dispatch_once(&onceToken, ^{
     [FBSDKInternalUtility checkRegisteredCanOpenURLScheme:FBSDK_CANOPENURL_FACEBOOK];
   });
-  NSURLComponents *components = [[NSURLComponents alloc] init];
-  components.scheme = FBSDK_CANOPENURL_FACEBOOK;
-  components.path = @"/";
-  return [[UIApplication sharedApplication]
-          canOpenURL:components.URL];
+  return [self _canOpenURLScheme:FBSDK_CANOPENURL_FACEBOOK];
 }
 
 + (BOOL)isMessengerAppInstalled
@@ -501,12 +502,16 @@ static NSMapTable *_transientObjects;
   dispatch_once(&onceToken, ^{
     [FBSDKInternalUtility checkRegisteredCanOpenURLScheme:FBSDK_CANOPENURL_MESSENGER];
   });
-  NSURLComponents *components = [[NSURLComponents alloc] init];
-  components.scheme = FBSDK_CANOPENURL_MESSENGER;
-  components.path = @"/";
-  return [[UIApplication sharedApplication]
-          canOpenURL:components.URL];
+  return [self _canOpenURLScheme:FBSDK_CANOPENURL_MESSENGER];
+}
 
++ (BOOL)isMSQRDPlayerAppInstalled
+{
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    [FBSDKInternalUtility checkRegisteredCanOpenURLScheme:FBSDK_CANOPENURL_MSQRD_PLAYER];
+  });
+  return [self _canOpenURLScheme:FBSDK_CANOPENURL_MSQRD_PLAYER];
 }
 
 #pragma mark - Object Lifecycle
@@ -578,6 +583,14 @@ static NSMapTable *_transientObjects;
   return object;
 }
 
++ (BOOL)_canOpenURLScheme:(NSString *)scheme
+{
+  NSURLComponents *components = [[NSURLComponents alloc] init];
+  components.scheme = scheme;
+  components.path = @"/";
+  return [[UIApplication sharedApplication] canOpenURL:components.URL];
+}
+
 + (void)validateAppID
 {
   if (![FBSDKSettings appID]) {
@@ -617,10 +630,34 @@ static NSMapTable *_transientObjects;
   }
 }
 
++ (UIWindow *)findWindow
+{
+  UIWindow *window = [UIApplication sharedApplication].keyWindow;
+  if (window == nil || window.windowLevel != UIWindowLevelNormal) {
+    for (window in [UIApplication sharedApplication].windows) {
+      if (window.windowLevel == UIWindowLevelNormal) {
+        break;
+      }
+    }
+  }
+  if (window == nil) {
+    [FBSDKLogger singleShotLogEntry:FBSDKLoggingBehaviorDeveloperErrors
+                       formatString:@"Unable to find a valid UIWindow", nil];
+  }
+  return window;
+}
 
 + (UIViewController *)topMostViewController
 {
-  UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+  UIWindow *keyWindow = [self findWindow];
+  // SDK expects a key window at this point, if it is not, make it one
+  if (keyWindow !=  nil && !keyWindow.isKeyWindow) {
+    [FBSDKLogger singleShotLogEntry:FBSDKLoggingBehaviorDeveloperErrors
+                       formatString:@"Unable to obtain a key window, marking %@ as keyWindow", keyWindow.description];
+    [keyWindow makeKeyWindow];
+  }
+
+  UIViewController *topController = keyWindow.rootViewController;
   while (topController.presentedViewController) {
     topController = topController.presentedViewController;
   }

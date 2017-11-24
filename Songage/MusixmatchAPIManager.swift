@@ -13,16 +13,17 @@ import SwiftyJSON
 
 class MusixmatchAPIManager
 {
+    private static var __once: () = {
+            Static.instance = MusixmatchAPIManager()
+        }()
     // Use singleton convention
     class var sharedInstance: MusixmatchAPIManager {
         struct Static {
             static var instance:MusixmatchAPIManager?
-            static var token: dispatch_once_t = 0
+            static var token: Int = 0
         }
         
-        dispatch_once(&Static.token)    {
-            Static.instance = MusixmatchAPIManager()
-        }
+        _ = MusixmatchAPIManager.__once
         return Static.instance!
     }
     
@@ -30,7 +31,7 @@ class MusixmatchAPIManager
     let apikey:String = "978b1949bd1c33d7708f8ed1b2711a33"
     
     // send in the lyrics to search the API for
-    func searchForTracksByLyrics(lyrics:[String], presentingViewController:UIViewController?, completion: (returnStuff: [(trackName:String, trackID:String)]?, error: NSError?) -> Void)
+    func searchForTracksByLyrics(_ lyrics:[String], presentingViewController:UIViewController?, completion: @escaping (_ returnStuff: [(trackName:String, trackID:String)]?, _ error: NSError?) -> Void)
     {
         var lyricsString:String = ""
         

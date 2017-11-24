@@ -1,21 +1,21 @@
 PODS:
-  - Alamofire (3.4.1)
-  - Bolts (1.7.0):
-    - Bolts/AppLinks (= 1.7.0)
-    - Bolts/Tasks (= 1.7.0)
-  - Bolts/AppLinks (1.7.0):
+  - Alamofire (4.5.1)
+  - Bolts (1.8.4):
+    - Bolts/AppLinks (= 1.8.4)
+    - Bolts/Tasks (= 1.8.4)
+  - Bolts/AppLinks (1.8.4):
     - Bolts/Tasks
-  - Bolts/Tasks (1.7.0)
-  - FBSDKCoreKit (4.13.0):
+  - Bolts/Tasks (1.8.4)
+  - FBSDKCoreKit (4.28.0):
     - Bolts (~> 1.7)
-  - FBSDKLoginKit (4.13.0):
+  - FBSDKLoginKit (4.28.0):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.13.0):
+  - FBSDKShareKit (4.28.0):
     - FBSDKCoreKit
-  - SwiftyJSON (2.3.2)
+  - SwiftyJSON (4.0.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 3.4)
+  - Alamofire
   - Bolts
   - FBSDKCoreKit
   - FBSDKLoginKit
@@ -28,17 +28,17 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   SwiftyJSON:
-    :commit: 73670b94292b8d8496c398a973f56ac67789ba9f
+    :commit: fb67763f27990ba76a42bf412f848af5aef5e5ea
     :git: https://github.com/SwiftyJSON/SwiftyJSON.git
 
 SPEC CHECKSUMS:
-  Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
-  Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
-  FBSDKCoreKit: 322234a989549a4594ddf02fdcf60bef80f97341
-  FBSDKLoginKit: 7a0ee41905a3e008a1b89aa26cd21717a45b9b9c
-  FBSDKShareKit: 4b714a6f381168908b2e7c0d302641897c69dcd6
-  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
+  Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
+  FBSDKCoreKit: ca961e279113f691fd83dc634c0bbad9d4e3f370
+  FBSDKLoginKit: b077381c27d800f21661757e8140cf2c80a91e4a
+  FBSDKShareKit: 4f525556e0df4cf0f574cb3f01c675434f29d477
+  SwiftyJSON: 8cd73b154950360d79292a8dc8c0d0a85d258930
 
-PODFILE CHECKSUM: 088db2119d37cc841d82f345acac4b734b6414e7
+PODFILE CHECKSUM: b0c190e9c5ac0901f5668beadc69cec9d898f43a
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.2.1

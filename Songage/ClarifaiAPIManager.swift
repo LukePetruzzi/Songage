@@ -12,16 +12,17 @@ import SwiftyJSON
 
 class ClarifaiAPIManager
 {
+    private static var __once: () = {
+            Static.instance = ClarifaiAPIManager()
+        }()
     // Use singleton convention
     class var sharedInstance: ClarifaiAPIManager {
         struct Static {
             static var instance:ClarifaiAPIManager?
-            static var token: dispatch_once_t = 0
+            static var token: Int = 0
         }
         
-        dispatch_once(&Static.token)    {
-            Static.instance = ClarifaiAPIManager()
-        }
+        _ = ClarifaiAPIManager.__once
         return Static.instance!
     }
     
@@ -30,9 +31,9 @@ class ClarifaiAPIManager
     let client_secret:String = "BtC0WPRZMd2JPGTmpguROKmuWc-9eS22VIvIS1t7"
     
     // saved access token optional
-    private var myAccessToken:String?
+    fileprivate var myAccessToken:String?
     
-    private var updatedMyAccessToken:Bool = false
+    fileprivate var updatedMyAccessToken:Bool = false
     
     // check if the manager has a token
     func hasOAuthToken() -> Bool
@@ -49,20 +50,20 @@ class ClarifaiAPIManager
     
     
     // pass in a jpeg image, get back Clarifai's tags for the image
-    func getTagsForImage(jpeg:NSData, presentingViewController:UIViewController, completion: (tags: [String]?, error: NSError?) -> Void)
+    func getTagsForImage(_ jpeg:Data, presentingViewController:UIViewController, completion: @escaping (_ tags: [String]?, _ error: NSError?) -> Void)
     {
         // add a loading overlay to view if one passed
         presentingViewController.addLoadingOverlay()
         
-        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+        DispatchQueue.global(priority: Int(DispatchQoS.QoSClass.userInitiated.rawValue)).async {
             
-            let dispatchGroup = dispatch_group_create()
+            let dispatchGroup = DispatchGroup()
             
             // get an authToken if needed
             if !self.hasOAuthToken()
             {
                 
-                dispatch_group_enter(dispatchGroup)
+                dispatchGroup.enter()
                 
                 // update the token
                 self.getOAuthToken({(thisError) -> Void in
@@ -72,11 +73,11 @@ class ClarifaiAPIManager
                         completion(tags: nil, error: thisError)
                     }
                     // let the dispatchGroup know that the closure is finished
-                    dispatch_group_leave(dispatchGroup)
+                    dispatchGroup.leave()
                 })
                 
                 // wait until anAsyncMethod is completed
-                dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
+                dispatchGroup.wait(timeout: DispatchTime.distantFuture)
                 
                 // if the token didn't update...
                 if !self.updatedMyAccessToken
@@ -88,7 +89,7 @@ class ClarifaiAPIManager
             
             
             let parameters:[String : String] = [
-                "encoded_data":jpeg.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+                "encoded_data":jpeg.base64EncodedString(options: .lineLength64Characters)
             ]
             let headers:[String : String] = [
                 "Authorization": "Bearer \(self.myAccessToken!)"
@@ -97,7 +98,7 @@ class ClarifaiAPIManager
             print("THIS IS THE TOKEN AT START OF FUNCTION: \(self.myAccessToken)")
             
             // send the request
-            let request = Alamofire.request(.POST, "https://api.clarifai.com/v1/tag/", parameters: parameters, encoding: .URL, headers: headers)
+            let request = Alamofire.request(.POST, "https://api.clarifai.com/v1/tag/", parameters: parameters, encoding: .url, headers: headers)
             
             var finalValues:[String] = []
             
@@ -124,7 +125,7 @@ class ClarifaiAPIManager
                     }
                     else if response.response!.statusCode == 401 // There is a problem with the token. Probably too old. Refresh it
                     {
-                        dispatch_group_enter(dispatchGroup)
+                        dispatchGroup.enter()
                         
                         // update the token
                         self.getOAuthToken({(thisError) -> Void in
@@ -134,11 +135,11 @@ class ClarifaiAPIManager
                                 completion(tags: nil, error: thisError)
                             }
                             // let the dispatchGroup know that the closure is finished
-                            dispatch_group_leave(dispatchGroup)
+                            dispatchGroup.leave()
                         })
                         
                         // wait until anAsyncMethod is completed
-                        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
+                        dispatchGroup.wait(timeout: DispatchTime.distantFuture)
                         
                         if !self.updatedMyAccessToken
                         {
@@ -169,7 +170,7 @@ class ClarifaiAPIManager
     
     // Private helper functions
     // get an auth token from Clarifai
-    private func getOAuthToken(completion: (error: NSError?) -> Void)
+    fileprivate func getOAuthToken(_ completion: @escaping (_ error: NSError?) -> Void)
     {
         // going to call the auth token so let the boolean know
         self.updatedMyAccessToken = false

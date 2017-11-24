@@ -35,7 +35,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         super.viewDidLoad()
         
         // make it so the image goes in real good
-        imageView.contentMode = .ScaleAspectFit
+        imageView.contentMode = .scaleAspectFit
         
         // set the delegate of the imagePicker
         imagePicker.delegate = self
@@ -44,7 +44,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         anyImageLoaded = false
     }
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         // update the session if needed
         SpotifyAPIManager.sharedInstance.updateSessionIfNeeded({(error) in
@@ -52,12 +52,12 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             // update the session if no errors
             if error != nil
             {
-                let alert = UIAlertController(title: "Error", message: "Error updating Spotify session:\n\(error!.localizedDescription)", preferredStyle: .Alert)
-                let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+                let alert = UIAlertController(title: "Error", message: "Error updating Spotify session:\n\(error!.localizedDescription)", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "Okay", style: .default, handler: nil)
                 alert.addAction(okAction)
                 
                 // show the alert to the calling viewController
-                self.presentViewController(alert, animated: true, completion: nil)
+                self.present(alert, animated: true, completion: nil)
             }
         })
     }
@@ -68,32 +68,32 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     
-    @IBAction func addImageButtonTapped(sender: UIButton)
+    @IBAction func addImageButtonTapped(_ sender: UIButton)
     {
         // let the user edit the photo before adding if they want
         imagePicker.allowsEditing = false
         
-        let alert = UIAlertController(title: "New Songage", message: "Where do you want the image for your Songage to come from?", preferredStyle: .ActionSheet)
+        let alert = UIAlertController(title: "New Songage", message: "Where do you want the image for your Songage to come from?", preferredStyle: .actionSheet)
         
-        let cameraAction = UIAlertAction(title: "Take a Photo", style: .Default, handler: {(cameraAction) -> Void in
+        let cameraAction = UIAlertAction(title: "Take a Photo", style: .default, handler: {(cameraAction) -> Void in
             
             // take a photo
-            self.imagePicker.sourceType = .Camera
-            self.presentViewController(self.imagePicker, animated: true, completion: nil)
+            self.imagePicker.sourceType = .camera
+            self.present(self.imagePicker, animated: true, completion: nil)
         })
-        let libraryAction = UIAlertAction(title: "Photo from Library", style: .Default, handler: {(libraryAction) -> Void in
+        let libraryAction = UIAlertAction(title: "Photo from Library", style: .default, handler: {(libraryAction) -> Void in
             
             // choose a photo from library
-            self.imagePicker.sourceType = .PhotoLibrary
-            self.presentViewController(self.imagePicker, animated: true, completion: nil)
+            self.imagePicker.sourceType = .photoLibrary
+            self.present(self.imagePicker, animated: true, completion: nil)
         })
-        let albumAction = UIAlertAction(title: "Photo from Album", style: .Default, handler: {(albumAction) -> Void in
+        let albumAction = UIAlertAction(title: "Photo from Album", style: .default, handler: {(albumAction) -> Void in
             
             // choose a photo from album
-            self.imagePicker.sourceType = .SavedPhotosAlbum
-            self.presentViewController(self.imagePicker, animated: true, completion: nil)
+            self.imagePicker.sourceType = .savedPhotosAlbum
+            self.present(self.imagePicker, animated: true, completion: nil)
         })
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         alert.addAction(cameraAction)
         alert.addAction(libraryAction)
@@ -101,11 +101,11 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         alert.addAction(cancelAction)
         
         // present the controller
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
     // finished picking the image from the controller
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject])
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
     {
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage
         {
@@ -121,23 +121,23 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         // an image has been loaded.
         self.anyImageLoaded = true
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     // just get rid of the imagePickerView if user cancels
-    func imagePickerControllerDidCancel(picker: UIImagePickerController)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController)
     {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     // begin Songage creation. Send imageData to Clarifai
-    @IBAction func createSongageTapped(sender: UIButton)
+    @IBAction func createSongageTapped(_ sender: UIButton)
     {
         // dont make the request unless an image is picked
         if anyImageLoaded == true
         {
             // disable button until completion function is finished
-            createSongageButton.enabled = false
+            createSongageButton.isEnabled = false
             
             // format the image to jpeg
             let jpeg = UIImageJPEGRepresentation(self.imageView.image!, 0.9)!
@@ -148,16 +148,16 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         else // no image loaded yet
         {
             // create and show an alert that the user has no image selected
-            let alert = UIAlertController(title: "No Image", message: "To create a Songage, supply an image!", preferredStyle: .ActionSheet)
-            let okAction = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+            let alert = UIAlertController(title: "No Image", message: "To create a Songage, supply an image!", preferredStyle: .actionSheet)
+            let okAction = UIAlertAction(title: "Okay", style: .default, handler: nil)
             alert.addAction(okAction)
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
         }
         
     }
     
     // after the button has been tapped
-    func getTagsComplete(tags: [String]?, error: NSError?)
+    func getTagsComplete(_ tags: [String]?, error: NSError?)
     {
         if tags != nil
         {
@@ -182,10 +182,10 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         }
         
         // reenable the button to create a songage
-        createSongageButton.enabled = true
+        createSongageButton.isEnabled = true
     }
     
-    func searchForTracksComplete(returnedSongs: [(trackName:String, trackID:String)]?, error: NSError?)
+    func searchForTracksComplete(_ returnedSongs: [(trackName:String, trackID:String)]?, error: NSError?)
     {
         if returnedSongs != nil
         {
@@ -260,14 +260,14 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
                         var albumObtainedCount = 0
                         
                         // load the albums once at a time
-                        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0))
+                        DispatchQueue.global(priority: Int(DispatchQoS.QoSClass.userInitiated.rawValue)).async
                         {
                             
-                            let dispatchGroup = dispatch_group_create()
+                            let dispatchGroup = DispatchGroup()
                             for track in returnedTracks! // get album cover for every track
                             {
                                 // enter the group
-                                dispatch_group_enter(dispatchGroup)
+                                dispatchGroup.enter()
                                 
                                 self.requestImage(track.album.largestCover.imageURL, completion: {(image) in
                                     
@@ -279,16 +279,16 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
                                         // set the covers to what was returned
                                         SongsList.sharedInstance.setAlbumCovers(albumCovers)
                                         // present the next view controller
-                                        self.presentViewController(PlayReturnedSongsViewController(), animated: true, completion: nil)
+                                        self.present(PlayReturnedSongsViewController(), animated: true, completion: nil)
                                         
                                         // remove the loading overlay because done loading
                                         self.removeLoadingOverlay()
                                     }
                                     
-                                    dispatch_group_leave(dispatchGroup)
+                                    dispatchGroup.leave()
                                 })
                                 
-                                dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
+                                dispatchGroup.wait(timeout: DispatchTime.distantFuture)
                             }
                         }
                         
@@ -299,7 +299,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     // reset the variables
-    private func resetMusixCalls()
+    fileprivate func resetMusixCalls()
     {
         musixCallsMadeSoFar = 0
         songsIDsForThisImage = []
